@@ -1,0 +1,44 @@
+<ion-content padding>
+  <form [formGroup]="loginForm">
+    <img src="./assets/imgs/reconsidere-expanded-logo.png">
+    <div class="input-group">
+      <ion-item rounded color="transparent">
+        <span class="input-group-addon" id="sizing-addon1">
+          <ion-icon name="person" color="green"></ion-icon>
+        </span>
+        <ion-input color="white" type="text" expand="full" required round formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" placeholder="exemplo@eowyn.com.br"></ion-input>
+      </ion-item>
+    </div>
+    <div class="input-group">
+      <ion-item rounded color="transparent">
+        <span class="input-group-addon" id="sizing-addon1">
+          <ion-icon name="lock" color="green"></ion-icon>
+        </span>
+        <ion-input color="white" required expand="full" round #passwordfield type="{{hidepassword ? 'password' : 'text'}}" type="password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" placeholder="senha"></ion-input>
+        <div class="input-group-append">
+          <span class="input-group-text">
+            <ion-icon color="green" (click)="hidepassword = !hidepassword" *ngIf="!hidepassword" name="eye">
+            </ion-icon>
+            <ion-icon color="green" (click)="hidepassword = !hidepassword" *ngIf="hidepassword" name="eye-off">
+            </ion-icon>
+          </span>
+        </div>
+      </ion-item>
+    </div>
+    <div padding></div>
+    <ion-button type="button" shape="round" [disabled]="!loginForm.valid" (click)="login()" expand="full" color="success">
+      <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
+      Entrar
+    </ion-button>
+  </form>
+
+  <ion-button  shape="round" expand="full" color="facebook" class="backButton" (click)="fblogin()">Logar com facebook
+    <ion-icon slot="start" name="logo-facebook" class="adjust-top"></ion-icon>
+  </ion-button>
+  <ion-button  shape="round" expand="full" color="google" (click)="gplogin()">Logar com google
+    <ion-icon slot="start" name="logo-googleplus" class="adjust-top"></ion-icon>
+  </ion-button>
+  <ion-button  shape="round" expand="full" color="primary" (click)="signup()">
+    Criar conta
+  </ion-button>
+</ion-content>

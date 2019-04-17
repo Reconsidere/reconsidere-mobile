@@ -1,0 +1,1 @@
+require('./patch.crypto.js')

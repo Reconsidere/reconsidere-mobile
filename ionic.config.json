@@ -1,0 +1,7 @@
+{
+  "name": "reconsidere-mobile",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
