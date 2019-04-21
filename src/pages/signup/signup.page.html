@@ -2,42 +2,71 @@
   <ion-list>
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Email</ion-label>
-      <ion-input [(ngModel)]="customer.email" type="email" placeholder="exemplo@eowyn.com.br"></ion-input>
+      <ion-input required [(ngModel)]="customer.email" type="email" placeholder="exemplo@eowyn.com.br"></ion-input>
+    </ion-item>
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">Nome</ion-label>
+      <ion-input required [(ngModel)]="customer.name" type="text" placeholder=""></ion-input>
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Senha</ion-label>
-      <ion-input [(ngModel)]="customer.password" type="password"></ion-input>
+      <ion-input required [(ngModel)]="customer.password" type="password"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Confirmar Senha</ion-label>
-      <ion-input [(ngModel)]="confirmPassword" type="password"></ion-input>
+      <ion-input required [(ngModel)]="confirmPassword" type="password"></ion-input>
     </ion-item>
   </ion-list>
   <ion-content *ngIf="!islogged">
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Data nascimento</ion-label>
-      <ion-datetime cancelText="cancelar" doneText="Ok" display-format="DD/MM/YYYY" [(ngModel)]="customer.birthday"></ion-datetime>
+      <ion-datetime cancelText="cancelar" doneText="Ok" display-format="DD/MM/YYYY" placeholder="00/00/0000" [(ngModel)]="customer.birthday"></ion-datetime>
     </ion-item>
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Sexo</ion-label>
-      <ion-select [(ngModel)]="customer.sex" placeholder="Selecione seu sexo">
-          <ion-select-option *ngFor=" let gender of genders">{{gender}}</ion-select-option>
+      <ion-select [(ngModel)]="customer.sex">
+        <ion-select-option *ngFor=" let gender of genders">{{gender}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Quais categorias pretende reciclar</ion-label>
-      <ion-select [(ngModel)]="customer.materials" placeholder="Selecione as categorias" multiple="true">
+      <ion-select [(ngModel)]="customer.materials" multiple="true">
         <ion-select-option *ngFor=" let material of materials">{{material}}</ion-select-option>
       </ion-select>
     </ion-item>
     <ion-item rounded>
-      <ion-label color="medium" position="stacked">Email</ion-label>
-      <ion-input [(ngModel)]="customer.email" type="email" placeholder="exemplo@eowyn.com.br"></ion-input>
+      <ion-label color="medium" position="stacked">CEP</ion-label>
+      <ion-input (ionBlur)="CEPSearch(customer.location.cep)" [(ngModel)]="customer.location.cep" type="text" placeholder="00000-000" mask="00.000-000"></ion-input>
+      <ion-spinner name="circles" *ngIf="loadingCep" item-left></ion-spinner>
+    </ion-item>
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">Município</ion-label>
+      <ion-input [(ngModel)]="customer.location.county" type="text" placeholder=""></ion-input>
+    </ion-item>
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">UF</ion-label>
+      <ion-input [(ngModel)]="customer.location.state" type="text" placeholder=""></ion-input>
+    </ion-item>
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">Bairro</ion-label>
+      <ion-input [(ngModel)]="customer.location.neighborhood" type="text" placeholder=""></ion-input>
+    </ion-item>
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">Logradouro</ion-label>
+      <ion-input [(ngModel)]="customer.location.publicPlace" type="text" placeholder=""></ion-input>
+    </ion-item>
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">Complemento</ion-label>
+      <ion-input [(ngModel)]="customer.location.complement" type="text" placeholder=""></ion-input>
+    </ion-item>
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">Número</ion-label>
+      <ion-input [(ngModel)]="customer.location.number" type="number" [min]="0" placeholder=""></ion-input>
     </ion-item>
 
   </ion-content>
-  <button ion-button full round color="success" (click)="signup()">
+  <ion-button type="button" shape="round" expand="full" color="success" (click)="signup()">
     <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
     Salvar
-  </button>
+  </ion-button>
 </ion-content>

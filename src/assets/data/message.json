@@ -1,0 +1,42 @@
+{
+    "INFO": {
+      "IRE006": { "status": "INFO", "summary": "", "message": ""}
+    },
+    "SUCCESS": {
+      "SRE001": { "status": "SUCCESS", "summary": "Dados salvos com sucesso!", "message": ""},
+      "SRE003": { "status": "SUCCESS", "summary": "", "message": ""},
+      "SRE004": { "status": "SUCCESS", "summary": "", "message": ""},
+      "SRE005": { "status": "SUCCESS", "summary": "", "message": ""}
+    },
+    "WARNNING": {
+      "WRE001": { "status": "WARNNING", "summary": "'Por favor, preencha os campos antes de salvar os dados!", "message": "Alguns dados neste formulário são obrigatórios"}
+  
+  
+  
+    },
+    "ERROR": {
+      "ERE001": { "status": "ERROR", "summary": "Usuário ou senha incorretos", "message": ""},
+      "ERE002": { "status": "ERROR", "summary": "Falha de conexão ao banco de dados inacessível", "message": ""},
+      "ERE003": { "status": "ERROR", "summary": "Impossível conectar a interface de persistência", "message": ""},
+      "ERE004": { "status": "ERROR", "summary": "A conexão foi perdida, efetue o login novamente", "message": ""},
+      "ERE005": { "status": "ERROR", "summary": "Não foi possível carregar o documento a partir do banco de dados", "message": ""},
+      "ERE006": { "status": "ERROR", "summary": "Não foi possível salvar os dados", "message": ""},
+      "ERE007": { "status": "ERROR", "summary": "Não foi possível remover os dados", "message": ""},
+      "ERE008": { "status": "ERROR", "summary": "Não foi possível localizar os dados solicitados.", "message": ""}
+    },
+    "DANGER": {
+      "DRE001": { "status": "DANGER", "summary": "", "message": ""},
+      "DRE002": { "status": "DANGER", "summary": "", "message": ""},
+      "DRE003": { "status": "DANGER", "summary": "", "message": ""},
+      "DRE004": { "status": "DANGER", "summary": "", "message": ""},
+      "DRE005": { "status": "DANGER", "summary": "", "message": ""}
+    },
+    "FATAL": {
+      "FRE001": { "status": "FATAL", "summary": "", "message": ""},
+      "FRE002": { "status": "FATAL", "summary": "", "message": ""},
+      "FRE003": { "status": "FATAL", "summary": "", "message": ""},
+      "FRE004": { "status": "FATAL", "summary": "", "message": ""},
+      "FRE005": { "status": "FATAL", "summary": "", "message": ""}
+    }
+  }
+  

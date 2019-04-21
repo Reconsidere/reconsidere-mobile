@@ -1,3 +1,5 @@
+import { Location } from 'src/models/location';
+
 export class Customer {
     _id: string;
     name: string;

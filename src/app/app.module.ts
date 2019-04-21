@@ -12,6 +12,8 @@ import { AuthService } from '../providers/auth.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { HttpClientModule } from '@angular/common/http';
 import { DecriptEncript } from './security/decriptencript';
+import {NgxMaskIonicModule} from 'ngx-mask-ionic';
+
 
 
 
@@ -23,6 +25,7 @@ import { DecriptEncript } from './security/decriptencript';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
+    NgxMaskIonicModule.forRoot()
   ],
   providers: [
     StatusBar,
@@ -30,7 +33,7 @@ import { DecriptEncript } from './security/decriptencript';
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     AuthService,
     AuthGuard,
-    DecriptEncript
+    DecriptEncript,
   ],
   bootstrap: [AppComponent],
 })
