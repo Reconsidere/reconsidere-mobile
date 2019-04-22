@@ -10,14 +10,18 @@
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Senha</ion-label>
-      <ion-input required [(ngModel)]="customer.password" type="password"></ion-input>
+      <ion-input required minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="passwordUser" type="password"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Confirmar Senha</ion-label>
-      <ion-input required [(ngModel)]="confirmPassword" type="password"></ion-input>
+      <ion-input required (ionBlur)="comparePassword()" minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="confirmPassword" type="password"></ion-input>
     </ion-item>
   </ion-list>
   <ion-content *ngIf="!islogged">
+    <ion-item rounded>
+      <ion-label color="medium" position="stacked">CPF</ion-label>
+      <ion-input required mask="000.000.000-00" [(ngModel)]="customer.cpf" (ionBlur)="checkCPF()" type="text" placeholder="000.000.000-00"></ion-input>
+    </ion-item>
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Data nascimento</ion-label>
       <ion-datetime cancelText="cancelar" doneText="Ok" display-format="DD/MM/YYYY" placeholder="00/00/0000" [(ngModel)]="customer.birthday"></ion-datetime>
@@ -65,8 +69,11 @@
     </ion-item>
 
   </ion-content>
-  <ion-button type="button" shape="round" expand="full" color="success" (click)="signup()">
-    <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
-    Salvar
-  </ion-button>
+  <ion-content>
+
+    <ion-button type="button" shape="round" expand="full" color="success" (click)="signup()">
+      <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
+      Salvar
+    </ion-button>
+  </ion-content>
 </ion-content>

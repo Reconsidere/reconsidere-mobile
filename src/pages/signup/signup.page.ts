@@ -4,9 +4,13 @@ import { Location } from 'src/models/location';
 import { CepService } from 'src/providers/cep.service';
 import { MenuController, ToastController } from '@ionic/angular';
 import { Toast } from 'src/app/toast/toast';
+import { map } from 'rxjs/operators';
+import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
-//import * as data from '../../assets/data/message.json';
-var messageCode = require('../../assets/data/message.json');
+import { AuthService } from 'src/providers/auth.service';
+import { CPFValidator } from 'src/validations/valid-cpf.validator';
+import { ConfirmPasswordValidator } from 'src/validations/confirm-password.validator';
+
 
 
 @Component({
@@ -23,9 +27,14 @@ export class SignupPage implements OnInit {
   genders;
   loadingCep;
   toast: Toast;
-  messageCode;
+  messageCode: any;
+  isValidPasswordUser: boolean;
+  passwordUser: string;
+  isValidCPF: boolean;
 
-  constructor(private cepService: CepService, private menuCtrl: MenuController, private http: HttpClient) {
+
+
+  constructor(private cepService: CepService, private menuCtrl: MenuController, private http: HttpClient, private toastController: ToastController, private authService: AuthService) {
     this.customer = new Customer();
     this.customer.location = new Location();
     this.islogged = false;
@@ -34,28 +43,51 @@ export class SignupPage implements OnInit {
     this.loadingCep = false;
     this.menuCtrl.enable(false);
     this.toast = new Toast();
+    this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
+    this.passwordUser = undefined;
   }
 
-  loadMessages(res) {
-    this.messageCode = res;
-  }
+
 
   ngOnInit() {
     //[TODO: Vinicius]se ja estiver logado e tiver o token pegar os dados do usuário pelo id.
     //se tiver logado habilitar menu..
   }
+  loadMessages(response) {
+    this.messageCode = response;
+  }
 
 
   CEPSearch() {
+    if (this.customer.location.cep === undefined || this.customer.location.cep === '') {
+      return;
+    }
     this.loadingCep = true;
     this.cepService.search(this.customer.location.cep).subscribe(result => {
       this.loadAddress(result);
     },
       error => {
         this.customer.location = new Location();
+        this.errorCep();
       }
     );
     this.loadingCep = false;
+  }
+  errorCep() {
+    this.showToast(this.messageCode['WARNNING']['WRE002']['summary'], 'warning', 3000);
+  }
+
+  async showToast(message: string, color: string, time: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      showCloseButton: true,
+      position: 'top',
+      closeButtonText: 'Fechar',
+      color: color,
+      duration: time,
+      animated: true
+    });
+    toast.present();
   }
 
   loadAddress(result) {
@@ -70,20 +102,82 @@ export class SignupPage implements OnInit {
     this.customer.location.state = result.uf;
   }
 
+  checkCPF() {
+    if (this.customer.cpf === undefined || this.customer.cpf === '') {
+      return;
+    }
+    this.isValidCPF = CPFValidator.MatchCNPJ(this.customer.cpf);
+    if (!this.isValidCPF) {
+      this.showToast(this.messageCode['WARNNING']['WRE003']['summary'], 'warning', 3000);
+    }
+  }
+
+  comparePassword() {
+    if (this.passwordUser === undefined || this.passwordUser === '' || (this.confirmPassword === undefined && this.confirmPassword === '')) {
+      return;
+    }
+    if (this.passwordUser === undefined || this.passwordUser === '' || this.confirmPassword === undefined || this.confirmPassword === '') {
+      this.isValidPasswordUser = false;
+      return;
+    }
+    if (this.passwordUser.length < 6 || this.confirmPassword.length < 6) {
+      this.showToast(this.messageCode['WARNNING']['WRE005']['summary'], 'warning', 3000);
+      return;
+    }
+    this.customer.password = this.passwordUser;
+    this.customer.password = this.authService.encript(this.customer.password);
+    this.confirmPassword = this.authService.encript(this.confirmPassword);
+
+    this.isValidPasswordUser = ConfirmPasswordValidator.MatchPassword(this.customer.password, this.confirmPassword);
+    if (this.isValidPasswordUser) {
+      this.confirmPassword = this.passwordUser;
+    } else {
+      this.confirmPassword = this.authService.decript(this.confirmPassword);
+      this.showToast(this.messageCode['WARNNING']['WRE004']['summary'], 'warning', 3000);
+
+    }
+  }
+
   verifyBeforeSave() {
-    if (this.customer.name === undefined || this.customer.password === undefined || this.customer.email === undefined) {
-      this.toast.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning');
+    if (this.customer.name === undefined
+      || this.customer.password === undefined
+      || this.customer.email === undefined
+      || this.customer.creationDate === undefined) {
+      this.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning', 3000);
       throw new Error();
+    }
+
+    if (this.islogged) {
+      if (this.customer.location === undefined || this.customer.location.cep === undefined
+        || this.customer.location.cep === undefined
+        || this.customer.location.county === undefined
+        || this.customer.location.neighborhood === undefined
+        || this.customer.location.number <= 0
+        || this.customer.location.publicPlace === undefined
+        || this.customer.location.state === undefined
+        || this.customer.location.complement === undefined
+        || this.customer.sex === undefined
+        || this.customer.birthday === undefined
+        || this.customer.materials === undefined
+      ) {
+        this.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning', 3000);
+        throw new Error();
+      }
+
     }
   }
 
   signup() {
     try {
-
+      if (!this.islogged) {
+        this.customer.creationDate = new Date();
+      }
+      this.verifyBeforeSave();
+      this.authService.add(this.customer);
+      this.showToast(this.messageCode['SUCCESS']['SRE001'], 'success', 3000);
     } catch (error) {
-
+      this.showToast(this.messageCode['ERROR'][error]['summary'], 'warning', 3000);
     }
-
   }
 
 

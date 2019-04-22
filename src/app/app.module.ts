@@ -15,8 +15,6 @@ import { DecriptEncript } from './security/decriptencript';
 import {NgxMaskIonicModule} from 'ngx-mask-ionic';
 
 
-
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -25,7 +23,7 @@ import {NgxMaskIonicModule} from 'ngx-mask-ionic';
     IonicModule.forRoot(),
     AppRoutingModule,
     HttpClientModule,
-    NgxMaskIonicModule.forRoot()
+    NgxMaskIonicModule.forRoot(),
   ],
   providers: [
     StatusBar,

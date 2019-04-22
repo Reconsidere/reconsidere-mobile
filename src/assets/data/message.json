@@ -9,7 +9,11 @@
       "SRE005": { "status": "SUCCESS", "summary": "", "message": ""}
     },
     "WARNNING": {
-      "WRE001": { "status": "WARNNING", "summary": "'Por favor, preencha os campos antes de salvar os dados!", "message": "Alguns dados neste formulário são obrigatórios"}
+      "WRE001": { "status": "WARNNING", "summary": "Por favor, preencha os campos antes de salvar os dados!", "message": "Alguns dados neste formulário são obrigatórios"},
+      "WRE002": { "status": "WARNNING", "summary": "CEP não localizado ou inexistente!", "message": ""},
+      "WRE003": { "status": "WARNNING", "summary": "CPF inválido", "message": ""},
+      "WRE004": { "status": "WARNNING", "summary": "Senhas não são iguais!", "message": ""},
+      "WRE005": { "status": "WARNNING", "summary": "Senhas deve ter no mínimo 6 caracteres e máximo 20", "message": ""}
   
   
   

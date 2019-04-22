@@ -31,7 +31,7 @@ export class AuthService {
   }
 
 
-   public isAuthenticated(): boolean {
+  public isAuthenticated(): boolean {
     if (!environment.production) {
       return true;
     }
@@ -44,6 +44,15 @@ export class AuthService {
     return true;
   }
 
+  signup(customer: Customer) {
+    if (customer._id === undefined) {
+      this.add(customer);
+    } else {
+      this.update(customer);
+
+    }
+  }
+
 
   add(customer: Customer) {
     this.http
@@ -52,7 +61,7 @@ export class AuthService {
       .subscribe(res => console.log('Done'));
   }
 
-  update(organizationId: string, customer: Customer) {
+  update(customer: Customer) {
     this.http
       .put(
         environment.database.uri + `/customer
@@ -67,7 +76,7 @@ export class AuthService {
     this.currenTokenSubject.next(null);
   }
 
-  
+
   public logout() {
     if (!this.isAuthenticated()) {
       return;

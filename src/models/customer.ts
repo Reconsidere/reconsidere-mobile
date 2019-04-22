@@ -4,6 +4,7 @@ export class Customer {
     _id: string;
     name: string;
     email: string;
+    cpf: string;
     password: string;
     birthday: Date;
     creationDate: Date;
@@ -27,7 +28,7 @@ export namespace Customer {
 
 export namespace Customer {
     export enum Gender {
-       Masc = 'Masculino',
-       Fem = 'Feminino'
+        Masc = 'Masculino',
+        Fem = 'Feminino'
     }
 }
