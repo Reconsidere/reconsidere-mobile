@@ -17,7 +17,7 @@
       <ion-input required (ionBlur)="comparePassword()" minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="confirmPassword" type="password"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-content *ngIf="!islogged">
+  <div *ngIf="!islogged">
     <ion-item rounded>
       <ion-label color="medium" position="stacked">CPF</ion-label>
       <ion-input required mask="000.000.000-00" [(ngModel)]="customer.cpf" (ionBlur)="checkCPF()" type="text" placeholder="000.000.000-00"></ion-input>
@@ -67,13 +67,10 @@
       <ion-label color="medium" position="stacked">Número</ion-label>
       <ion-input [(ngModel)]="customer.location.number" type="number" [min]="0" placeholder=""></ion-input>
     </ion-item>
-
-  </ion-content>
-  <ion-content>
+  </div>
 
     <ion-button type="button" shape="round" expand="full" color="success" (click)="signup()">
       <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
       Salvar
     </ion-button>
-  </ion-content>
 </ion-content>
