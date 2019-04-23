@@ -17,10 +17,10 @@
       <ion-input required (ionBlur)="comparePassword()" minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="confirmPassword" type="password"></ion-input>
     </ion-item>
   </ion-list>
-  <div *ngIf="!islogged">
+  <div *ngIf="islogged">
     <ion-item rounded>
       <ion-label color="medium" position="stacked">CPF</ion-label>
-      <ion-input required mask="000.000.000-00" [(ngModel)]="customer.cpf" (ionBlur)="checkCPF()" type="text" placeholder="000.000.000-00"></ion-input>
+      <ion-input required maxlength="14" [(ngModel)]="customer.cpf" (ionBlur)="checkCPF()" type="tel" placeholder=""></ion-input>
     </ion-item>
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Data nascimento</ion-label>
@@ -40,7 +40,7 @@
     </ion-item>
     <ion-item rounded>
       <ion-label color="medium" position="stacked">CEP</ion-label>
-      <ion-input (ionBlur)="CEPSearch(customer.location.cep)" [(ngModel)]="customer.location.cep" type="text" placeholder="00000-000" mask="00.000-000"></ion-input>
+      <ion-input (ionBlur)="CEPSearch(customer.location.cep)" [(ngModel)]="customer.location.cep" type="tel"></ion-input>
       <ion-spinner name="circles" *ngIf="loadingCep" item-left></ion-spinner>
     </ion-item>
     <ion-item rounded>
@@ -69,8 +69,13 @@
     </ion-item>
   </div>
 
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
     <ion-button type="button" shape="round" expand="full" color="success" (click)="signup()">
       <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
       Salvar
     </ion-button>
-</ion-content>
+  </ion-toolbar>
+</ion-footer>

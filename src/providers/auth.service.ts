@@ -38,10 +38,25 @@ export class AuthService {
 
     const jwtHelper = new JwtHelperService();
     if (jwtHelper.isTokenExpired(this.currenTokenSubject.value)) {
-      this.cleanStorage();
-      return false;
+      return this.refreshToken();
     }
     return true;
+  }
+
+  refreshToken() {
+    let user = JSON.parse(localStorage.getItem('currentUser'));
+    if (user === undefined || user === null) {
+      this.cleanStorage();
+      return false;
+    } else {
+      try {
+        this.generateToken(user, user.password);
+        return true;
+      } catch (error) {
+        this.cleanStorage();
+        return false;
+      }
+    }
   }
 
   signup(customer: Customer) {
@@ -56,23 +71,19 @@ export class AuthService {
 
   add(customer: Customer) {
     this.http
-      .post(environment.api.uri + `api/customer
-      /add`, customer)
+      .post(environment.api.uri + `api/customer/add`, customer)
       .subscribe(res => console.log('Done'));
   }
 
   update(customer: Customer) {
     this.http
-      .put(
-        environment.database.uri + `/customer
-        /update/${customer._id}`,
-        customer
-      )
+      .put(environment.database.uri + `/customer/update/${customer._id}`,customer)
       .subscribe(res => console.log('Done'));
   }
 
   cleanStorage() {
     localStorage.removeItem('currentToken');
+    localStorage.removeItem('currentUser');
     this.currenTokenSubject.next(null);
   }
 
@@ -117,6 +128,7 @@ export class AuthService {
         });
       }
       localStorage.setItem('currentToken', JSON.stringify(customer.token));
+      localStorage.setItem('currentUser', JSON.stringify(customer));
       this.currenTokenSubject.next(customer.token);
       return true;
     }

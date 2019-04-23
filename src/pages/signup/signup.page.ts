@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/providers/auth.service';
 import { CPFValidator } from 'src/validations/valid-cpf.validator';
 import { ConfirmPasswordValidator } from 'src/validations/confirm-password.validator';
+import { Mask } from 'src/util/mask';
 
 
 
@@ -65,6 +66,7 @@ export class SignupPage implements OnInit {
     this.loadingCep = true;
     this.cepService.search(this.customer.location.cep).subscribe(result => {
       this.loadAddress(result);
+      this.customer.location.cep = Mask.mask('cep', this.customer.location.cep);
     },
       error => {
         this.customer.location = new Location();
@@ -94,6 +96,10 @@ export class SignupPage implements OnInit {
     if (result === undefined || result === null) {
       this.customer.location = new Location();
     }
+    if (result.erro !== undefined && result.erro === true) {
+      this.errorCep();
+      return;
+    }
     this.customer.location.cep = result.cep;
     this.customer.location.publicPlace = result.logradouro;
     this.customer.location.complement = result.complemento;
@@ -109,7 +115,13 @@ export class SignupPage implements OnInit {
     this.isValidCPF = CPFValidator.MatchCNPJ(this.customer.cpf);
     if (!this.isValidCPF) {
       this.showToast(this.messageCode['WARNNING']['WRE003']['summary'], 'warning', 3000);
+    } else {
+      this.customer.cpf = Mask.mask('cpf', this.customer.cpf);
     }
+  }
+
+  mask(type: string) {
+
   }
 
   comparePassword() {
@@ -163,7 +175,15 @@ export class SignupPage implements OnInit {
         this.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning', 3000);
         throw new Error();
       }
-
+      let valid = CPFValidator.MatchCNPJ(this.customer.cpf);
+      if (!valid) {
+        this.showToast(this.messageCode['WARNNING']['WRE003']['summary'], 'warning', 3000);
+        throw new Error();
+      }
+      if (this.passwordUser !== this.confirmPassword) {
+        this.showToast(this.messageCode['WARNNING']['WRE004']['summary'], 'warning', 3000);
+        throw new Error();
+      }
     }
   }
 
@@ -173,8 +193,8 @@ export class SignupPage implements OnInit {
         this.customer.creationDate = new Date();
       }
       this.verifyBeforeSave();
-      this.authService.add(this.customer);
-      this.showToast(this.messageCode['SUCCESS']['SRE001'], 'success', 3000);
+      this.authService.signup(this.customer);
+      this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
     } catch (error) {
       this.showToast(this.messageCode['ERROR'][error]['summary'], 'warning', 3000);
     }
