@@ -3,13 +3,10 @@
   "integrations": {
     "cordova": {}
   },
-  "type": "angular",
   "proxies": [
     {
-      "/api": {
-        "target": "http://devops.reconsidere.online:32546",
-        "secure": "false"
-      }
+      "path": "/api",
+      "proxyUrl": "http://devops.reconsidere.online:32546"
     }
   ]
 }

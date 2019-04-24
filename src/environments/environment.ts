@@ -1,5 +1,5 @@
 export const environment = {
-  production: true,
+  production: false,
   auth: true,
   database: {
     description: 'Eowyn Reconsidere Enterprise Development Mongo DataBase',
@@ -23,7 +23,7 @@ export const environment = {
     external: {
       uri: `localhost:32546`
     },
-    uri: "localhost:32546"
+    uri: 'localhost:32546'
   },
   secret: '154097$#@$^@1ETI',
 };

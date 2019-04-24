@@ -59,25 +59,32 @@ export class AuthService {
     }
   }
 
-  signup(customer: Customer) {
+  signup(customer: Customer, resolve, reject) {
     if (customer._id === undefined) {
-      this.add(customer);
+      this.add(customer, resolve, reject);
     } else {
-      this.update(customer);
+      this.update(customer, resolve, reject);
 
     }
   }
 
 
-  add(customer: Customer) {
+  add(customer: Customer, resolve, reject) {
     this.http
-      .post(environment.api.uri + `api/customer/add`, customer)
-      .subscribe(res => console.log('Done'));
+      .post(environment.database.uri + `/customer/add`, customer)
+      .subscribe(res => {
+        console.log('Done');
+        resolve();
+      },
+        error => {
+          reject(error);
+          //throw new Error(error);
+        });
   }
 
-  update(customer: Customer) {
+  update(customer: Customer, resolve, reject) {
     this.http
-      .put(environment.database.uri + `/customer/update/${customer._id}`,customer)
+      .put(environment.database.uri + `/api/customer/update/${customer._id}`, customer)
       .subscribe(res => console.log('Done'));
   }
 

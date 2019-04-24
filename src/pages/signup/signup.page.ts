@@ -11,6 +11,7 @@ import { AuthService } from 'src/providers/auth.service';
 import { CPFValidator } from 'src/validations/valid-cpf.validator';
 import { ConfirmPasswordValidator } from 'src/validations/confirm-password.validator';
 import { Mask } from 'src/util/mask';
+import { errorHandler } from '@angular/platform-browser/src/browser';
 
 
 
@@ -187,16 +188,19 @@ export class SignupPage implements OnInit {
     }
   }
 
-  signup() {
+  async signup() {
     try {
       if (!this.islogged) {
         this.customer.creationDate = new Date();
       }
       this.verifyBeforeSave();
-      this.authService.signup(this.customer);
+
+      let promise = await new Promise((resolve, reject) => {
+        this.authService.signup(this.customer, resolve, reject);
+      });
       this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
     } catch (error) {
-      this.showToast(this.messageCode['ERROR'][error]['summary'], 'warning', 3000);
+      this.showToast(this.messageCode['WARNNING'][error]['summary'], 'warning', 3000);
     }
   }
 

@@ -13,7 +13,9 @@
       "WRE002": { "status": "WARNNING", "summary": "CEP não localizado ou inexistente!", "message": ""},
       "WRE003": { "status": "WARNNING", "summary": "CPF inválido", "message": ""},
       "WRE004": { "status": "WARNNING", "summary": "Senhas não são iguais!", "message": ""},
-      "WRE005": { "status": "WARNNING", "summary": "Senhas deve ter no mínimo 6 caracteres e máximo 20", "message": ""}
+      "WRE005": { "status": "WARNNING", "summary": "Senhas deve ter no mínimo 6 caracteres e máximo 20", "message": ""},
+      "WRE006": { "status": "WARNNING", "summary": "Email já está em uso", "message": "Não é permitido a utilização de emails duplicados."}
+
   
   
   

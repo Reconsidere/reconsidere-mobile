@@ -1,6 +1,0 @@
-{
-    "/api": {
-        "target": "http://devops.reconsidere.online:32546",
-        "secure": "false"
-    }
-}

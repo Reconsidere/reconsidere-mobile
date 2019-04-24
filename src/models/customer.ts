@@ -11,7 +11,7 @@ export class Customer {
     sex: string;
     token?: string;
     location: Location;
-    materials: [string];
+    materials: [];
 }
 
 
