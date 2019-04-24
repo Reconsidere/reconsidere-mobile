@@ -60,6 +60,7 @@ export class LoginPage implements OnInit {
         .pipe(first())
         .subscribe(
           data => {
+            this.menuCtrl.enable(true);
             this.router.navigate([this.returnUrl]);
           },
           error => {

@@ -14,7 +14,7 @@
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Confirmar Senha</ion-label>
-      <ion-input required (ionBlur)="comparePassword()" minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="confirmPassword" type="password"></ion-input>
+      <ion-input required  (ionBlur)="comparePassword()" minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="confirmPassword" type="password"></ion-input>
     </ion-item>
   </ion-list>
   <div *ngIf="islogged">
@@ -76,6 +76,9 @@
     <ion-button type="button" shape="round" expand="full" color="success" (click)="signup()">
       <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
       Salvar
+    </ion-button>
+    <ion-button type="button" shape="round" expand="full" color="primary" (click)="clean()">
+      Limpar 
     </ion-button>
   </ion-toolbar>
 </ion-footer>

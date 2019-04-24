@@ -12,6 +12,7 @@ import { CPFValidator } from 'src/validations/valid-cpf.validator';
 import { ConfirmPasswordValidator } from 'src/validations/confirm-password.validator';
 import { Mask } from 'src/util/mask';
 import { errorHandler } from '@angular/platform-browser/src/browser';
+import { Router } from '@angular/router';
 
 
 
@@ -33,10 +34,11 @@ export class SignupPage implements OnInit {
   isValidPasswordUser: boolean;
   passwordUser: string;
   isValidCPF: boolean;
+  changedPassword;
 
 
 
-  constructor(private cepService: CepService, private menuCtrl: MenuController, private http: HttpClient, private toastController: ToastController, private authService: AuthService) {
+  constructor(private router: Router, private cepService: CepService, private menuCtrl: MenuController, private http: HttpClient, private toastController: ToastController, private authService: AuthService) {
     this.customer = new Customer();
     this.customer.location = new Location();
     this.islogged = false;
@@ -52,8 +54,17 @@ export class SignupPage implements OnInit {
 
 
   ngOnInit() {
-    //[TODO: Vinicius]se ja estiver logado e tiver o token pegar os dados do usuário pelo id.
-    //se tiver logado habilitar menu..
+    if (this.authService.isAuthenticated()) {
+      this.customer = JSON.parse(localStorage.getItem('currentUser'));
+      this.menuCtrl.enable(true);
+      this.passwordUser = this.authService.decript(this.customer.password);
+      this.confirmPassword = this.authService.decript(this.customer.password);
+      this.changedPassword = false;
+      this.islogged = true;
+      if (this.customer.location === undefined) {
+        this.customer.location = new Location();
+      }
+    }
   }
   loadMessages(response) {
     this.messageCode = response;
@@ -121,9 +132,6 @@ export class SignupPage implements OnInit {
     }
   }
 
-  mask(type: string) {
-
-  }
 
   comparePassword() {
     if (this.passwordUser === undefined || this.passwordUser === '' || (this.confirmPassword === undefined && this.confirmPassword === '')) {
@@ -147,7 +155,9 @@ export class SignupPage implements OnInit {
     } else {
       this.confirmPassword = this.authService.decript(this.confirmPassword);
       this.showToast(this.messageCode['WARNNING']['WRE004']['summary'], 'warning', 3000);
-
+    }
+    if (this.customer._id !== undefined) {
+      this.changedPassword = true;
     }
   }
 
@@ -188,10 +198,23 @@ export class SignupPage implements OnInit {
     }
   }
 
+  clean() {
+    this.customer = new Customer();
+    this.customer.location = new Location();
+    this.passwordUser = undefined;
+    this.confirmPassword = undefined;
+  }
+
   async signup() {
     try {
+      let isUpdate = false;
       if (!this.islogged) {
         this.customer.creationDate = new Date();
+      } else {
+        isUpdate = true;
+        if (this.customer._id !== undefined && !this.changedPassword) {
+          this.comparePassword();
+        }
       }
       this.verifyBeforeSave();
 
@@ -199,9 +222,20 @@ export class SignupPage implements OnInit {
         this.authService.signup(this.customer, resolve, reject);
       });
       this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
+      this.finishSignUp(promise, isUpdate);
     } catch (error) {
       this.showToast(this.messageCode['WARNNING'][error]['summary'], 'warning', 3000);
     }
+  }
+
+  finishSignUp(promise, isUpdate) {
+    localStorage.setItem('currentUser', JSON.stringify(promise));
+    if (isUpdate) {
+      return;
+    }
+    this.authService.refreshToken();
+    this.menuCtrl.enable(true);
+    this.router.navigate(['/home']);
   }
 
 

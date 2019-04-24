@@ -50,7 +50,7 @@ export class AuthService {
       return false;
     } else {
       try {
-        this.generateToken(user, user.password);
+        this.generateToken(user, this.decript(user.password));
         return true;
       } catch (error) {
         this.cleanStorage();
@@ -68,24 +68,26 @@ export class AuthService {
     }
   }
 
-
   add(customer: Customer, resolve, reject) {
     this.http
       .post(environment.database.uri + `/customer/add`, customer)
       .subscribe(res => {
-        console.log('Done');
-        resolve();
+        resolve(res);
       },
         error => {
           reject(error);
-          //throw new Error(error);
         });
   }
 
   update(customer: Customer, resolve, reject) {
     this.http
-      .put(environment.database.uri + `/api/customer/update/${customer._id}`, customer)
-      .subscribe(res => console.log('Done'));
+      .put(environment.database.uri + `/customer/update/${customer._id}`, customer)
+      .subscribe(res => {
+        resolve(res);
+      },
+        error => {
+          reject(error);
+        });
   }
 
   cleanStorage() {
@@ -104,7 +106,7 @@ export class AuthService {
 
   public login(email: string, password: string) {
     return this.http
-      .post<any>(`${environment.database.uri}/customer/user/authenticate`, {
+      .post<any>(`${environment.database.uri}/customer/authenticate`, {
         email: email
       })
       .pipe(

@@ -14,15 +14,20 @@ import { Router } from '@angular/router';
 export class AppComponent {
   public appPages = [
     {
-      title: 'Home',
+      title: 'Conta',
+      url: '/signup',
+      icon: 'contact'
+    },
+    {
+      title: 'Início',
       url: '/home',
       icon: 'home'
     },
     {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
-    }
+      title: 'Sair',
+      url: '/logout',
+      icon: 'exit'
+    },
   ];
 
   currentCustomer: Customer;
