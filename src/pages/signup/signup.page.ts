@@ -45,7 +45,6 @@ export class SignupPage implements OnInit {
     this.materials = Object.values(Customer.Material);
     this.genders = Object.values(Customer.Gender);
     this.loadingCep = false;
-    this.menuCtrl.enable(false);
     this.toast = new Toast();
     this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
     this.passwordUser = undefined;
@@ -56,7 +55,6 @@ export class SignupPage implements OnInit {
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
       this.customer = JSON.parse(localStorage.getItem('currentUser'));
-      this.menuCtrl.enable(true);
       this.passwordUser = this.authService.decript(this.customer.password);
       this.confirmPassword = this.authService.decript(this.customer.password);
       this.changedPassword = false;
@@ -64,6 +62,8 @@ export class SignupPage implements OnInit {
       if (this.customer.location === undefined) {
         this.customer.location = new Location();
       }
+    } else {
+      this.menuCtrl.enable(false);
     }
   }
   loadMessages(response) {

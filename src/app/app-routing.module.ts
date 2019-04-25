@@ -16,7 +16,8 @@ const routes: Routes = [
     loadChildren: '../pages/home/home.module#HomePageModule', canActivate: [AuthGuard]
   },
   { path: 'signup', loadChildren: '../pages/signup/signup.module#SignupPageModule' },
-  { path: 'logout', loadChildren: './logout/logout.module#LogoutPageModule' }
+  { path: 'logout', loadChildren: './logout/logout.module#LogoutPageModule' },  { path: 'scheduling', loadChildren: './scheduling/scheduling.module#SchedulingPageModule' }
+
 
 ];
 
