@@ -3,12 +3,12 @@
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Data</ion-label>
       <ion-datetime required [(ngModel)]="customer.scheduling.date" display-format="DD MM YYYY">
-        </ion-input>
+      </ion-datetime>
     </ion-item>
     <ion-item rounded>
       <ion-label color="medium" position="stacked">Horário</ion-label>
       <ion-datetime required [(ngModel)]="customer.scheduling.hour" display-format="HH:mm">
-        </ion-input>
+      </ion-datetime>
     </ion-item>
 
     <ion-item>
@@ -27,11 +27,16 @@
       <ion-label color="medium" position="stacked">Quantidade</ion-label>
       <ion-input minlength="0" placeholder="Se souber a quantidade aproximada insira neste campo" [(ngModel)]="customer.scheduling.quantity" type="number"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label color="medium" position="stacked">Foto</ion-label>
-      <ion-input placeholder="Para facilitra a gestão de seus resíduos tire uma foto do que deseja reciclar" [(ngModel)]="confirmPassword" type="text"></ion-input>
-      <ion-button type="button" shape="round" expand="full" color="primary" (click)="takePicture()">
-        Tirar foto
-      </ion-button>
-    </ion-item>
   </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button type="button" shape="round" expand="full" color="primary" (click)="takePicture()">
+      Tirar foto
+    </ion-button>
+    <ion-button type="button" shape="round" expand="full" color="primary" (click)="openGallery()">
+      Abrir galeria
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

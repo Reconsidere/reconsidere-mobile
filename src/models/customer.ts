@@ -1,4 +1,6 @@
 import { Location } from 'src/models/location';
+import { Payment } from './payment';
+import { Scheduling } from './scheduling';
 
 export class Customer {
     _id: string;
@@ -12,6 +14,8 @@ export class Customer {
     token?: string;
     location: Location;
     materials: [];
+    payment: Payment;
+    scheduling: [Scheduling];
 }
 
 

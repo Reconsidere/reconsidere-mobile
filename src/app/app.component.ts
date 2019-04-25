@@ -24,6 +24,11 @@ export class AppComponent {
       icon: 'home'
     },
     {
+      title: 'Agendamento',
+      url: '/scheduling',
+      icon: 'pin'
+    },
+    {
       title: 'Sair',
       url: '/logout',
       icon: 'exit'
