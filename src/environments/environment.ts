@@ -8,7 +8,8 @@ export const environment = {
     host: 'ec2-18-216-31-156.us-east-2.compute.amazonaws.com',
     port: '27017',
     dbname: 'reconsideredb',
-    uri: `http://localhost:32546`
+    //uri: `http://localhost:32546`
+    uri:'192.168.0.6:32546'
   },
   api: {
     auth: {

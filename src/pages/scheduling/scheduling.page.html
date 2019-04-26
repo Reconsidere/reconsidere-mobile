@@ -14,6 +14,9 @@
     <ion-item>
       <ion-label color="medium" position="stacked">Endereço</ion-label>
       <ion-input required [(ngModel)]="customer.location.publicPlace" type="text"></ion-input>
+      <ion-button type="button" shape="round" expand="full" color="primary" (click)="getLocation()">
+        Selecionar localização atual
+      </ion-button>
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Descrição</ion-label>

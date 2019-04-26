@@ -4,14 +4,11 @@ import { Location } from 'src/models/location';
 import { CepService } from 'src/providers/cep.service';
 import { MenuController, ToastController } from '@ionic/angular';
 import { Toast } from 'src/app/toast/toast';
-import { map } from 'rxjs/operators';
-import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/providers/auth.service';
 import { CPFValidator } from 'src/validations/valid-cpf.validator';
 import { ConfirmPasswordValidator } from 'src/validations/confirm-password.validator';
 import { Mask } from 'src/util/mask';
-import { errorHandler } from '@angular/platform-browser/src/browser';
 import { Router } from '@angular/router';
 
 

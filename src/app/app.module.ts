@@ -16,8 +16,9 @@ import { ErrorInterceptor } from './security/error.interceptor';
 import { APP_BASE_HREF } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { JwtInterceptor } from './security/jwt.interceptor';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
-
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 
 @NgModule({
@@ -29,7 +30,7 @@ import { JwtInterceptor } from './security/jwt.interceptor';
     IonicModule.forRoot(),
     AppRoutingModule,
   ],
-  
+
   providers: [
     StatusBar,
     SplashScreen,
@@ -41,6 +42,8 @@ import { JwtInterceptor } from './security/jwt.interceptor';
     AuthService,
     AuthGuard,
     DecriptEncript,
+    Geolocation,
+    NativeGeocoder
   ],
   bootstrap: [AppComponent],
 })
