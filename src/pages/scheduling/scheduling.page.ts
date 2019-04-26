@@ -121,7 +121,7 @@ export class SchedulingPage implements OnInit {
     });
   }
 
-  
+
 
   getAddress() {
     let options: NativeGeocoderOptions = {
@@ -130,14 +130,8 @@ export class SchedulingPage implements OnInit {
     };
 
     this.nativeGeocoder.reverseGeocode(52.5072095, 13.1452818, options)
-      .then((result: NativeGeocoderReverseResult[]) => {
+      .then((result: any[]) => {
         return console.log(JSON.stringify(result[0]));
-      })
-      .catch((error: any) => console.log(error));
-
-    this.nativeGeocoder.forwardGeocode('Berlin', options)
-      .then((coordinates: NativeGeocoderForwardResult[]) => {
-        return console.log('The coordinates are latitude=' + coordinates[0].latitude + ' and longitude=' + coordinates[0].longitude);
       })
       .catch((error: any) => console.log(error));
   }
