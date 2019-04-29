@@ -115,21 +115,20 @@ export class SchedulingPage implements OnInit {
     let watch = this.geolocation.watchPosition();
     watch.subscribe((data) => {
       let ccc = data;
-      // data can be a set of coordinates, or an error (if an error occurred).
-      // data.coords.latitude
-      // data.coords.longitude
+      this.getAddress(data.coords.latitude, data.coords.longitude
+      );
     });
   }
 
 
 
-  getAddress() {
+  getAddress(latitude, longitude) {
     let options: NativeGeocoderOptions = {
       useLocale: true,
       maxResults: 5
     };
 
-    this.nativeGeocoder.reverseGeocode(52.5072095, 13.1452818, options)
+    this.nativeGeocoder.reverseGeocode(latitude, longitude, options)
       .then((result: any[]) => {
         return console.log(JSON.stringify(result[0]));
       })
