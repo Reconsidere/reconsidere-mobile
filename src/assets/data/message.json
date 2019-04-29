@@ -14,7 +14,9 @@
       "WRE003": { "status": "WARNNING", "summary": "CPF inválido", "message": ""},
       "WRE004": { "status": "WARNNING", "summary": "Senhas não são iguais!", "message": ""},
       "WRE005": { "status": "WARNNING", "summary": "Senhas deve ter no mínimo 6 caracteres e máximo 20", "message": ""},
-      "WRE006": { "status": "WARNNING", "summary": "Email já está em uso", "message": "Não é permitido a utilização de emails duplicados."}
+      "WRE006": { "status": "WARNNING", "summary": "Email já está em uso", "message": "Não é permitido a utilização de emails duplicados."},
+      "WRE007": { "status": "WARNNING", "summary": "Não foi possível buscar sua localização!", "message": ""},
+      "WRE008": { "status": "WARNNING", "summary": "Não foi possível ativar sua localização!", "message": ""}
 
   
   

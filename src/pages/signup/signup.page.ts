@@ -169,7 +169,6 @@ export class SignupPage implements OnInit {
 
     if (this.islogged) {
       if (this.customer.location === undefined || this.customer.location.cep === undefined
-        || this.customer.location.cep === undefined
         || this.customer.location.county === undefined
         || this.customer.location.neighborhood === undefined
         || this.customer.location.number <= 0

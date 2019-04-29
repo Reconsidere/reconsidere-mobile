@@ -8,6 +8,9 @@ import { HttpClient } from '@angular/common/http';
 import { ToastController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { SchedulingService } from 'src/providers/scheduling.service';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 
 @Component({
@@ -22,9 +25,14 @@ export class SchedulingPage implements OnInit {
   messageCode: any;
   customer: Customer;
   scheduling: Scheduling;
-  constructor(private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation, private authService: AuthService, private http: HttpClient, private toastController: ToastController) {
+  isLocationOpen;
+  latitude;
+  longitude;
+  loading;
+  constructor(private diagnostic: Diagnostic, private schedulingService: SchedulingService, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation, private authService: AuthService, private http: HttpClient, private toastController: ToastController) {
     this.scheduling = new Scheduling();
     this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
+    this.loading = false;
   }
 
 
@@ -69,12 +77,14 @@ export class SchedulingPage implements OnInit {
 
   takePicture() {
     Camera.getPicture({
-      destinationType: Camera.DestinationType.DATA_URL,
+      destinationType: Camera.DestinationType.FILE_URI,
       targetWidth: 1000,
-      targetHeight: 1000
+      targetHeight: 1000,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
     }).then((imageData) => {
       // imageData is a base64 encoded string
-      this.base64Image = 'data:image/jpeg;base64,' + imageData;
+      //this.base64Image = 'data:image/jpeg;base64,' + imageData;
+      this.scheduling.picture = imageData;
     }, (err) => {
       console.log(err);
     });
@@ -94,49 +104,146 @@ export class SchedulingPage implements OnInit {
     }
 
     Camera.getPicture(cameraOptions)
-      .then(file_uri => this.imageSrc = file_uri,
+      .then(file_uri => {
+        this.scheduling.picture = file_uri;
+      },
         err => console.log(err));
   }
 
 
-  getLocation() {
-    ///tem um bug no native location se o gps estiver fechado da crash aqui, 
-    //então a ideia é se estiver fechado abrir primeiro se não abrir nem vir neste método
-    this.geolocation.getCurrentPosition().then((resp) => {
-      let ccc = resp;
-      // resp.coords.latitude
-      // resp.coords.longitude
-    }).catch((error) => {
-      console.log('Error getting location', error);
-    });
 
 
-
-    let watch = this.geolocation.watchPosition();
-    watch.subscribe((data) => {
-      let ccc = data;
-      this.getAddress(data.coords.latitude, data.coords.longitude
-      );
+  async getLocation() {
+    await this.enableGps();
+    if (!this.isLocationOpen) {
+      await this.openLocation();
+    }
+    if (this.isLocationOpen) {
+      let promise = await new Promise((resolve, reject) => {
+        this.geolocation.getCurrentPosition().then((resp) => {
+          this.latitude = resp.coords.latitude;
+          this.longitude = resp.coords.longitude;
+          resolve();
+        }).catch((error) => {
+          reject();
+        });
+      });
+      this.getAddress(this.latitude, this.longitude);
+    }
+  }
+  async enableGps() {
+    let promise = await new Promise((resolve, reject) => {
+      this.diagnostic.isGpsLocationAvailable().then(x => {
+        if (x) {
+          this.isLocationOpen = true;
+        } else {
+          this.isLocationOpen = false;
+        }
+        resolve();
+      }).catch(x => {
+        this.isLocationOpen = false;
+        reject();
+      });
     });
   }
 
 
-
-  getAddress(latitude, longitude) {
+  async getAddress(latitude, longitude) {
     let options: NativeGeocoderOptions = {
       useLocale: true,
       maxResults: 5
     };
 
+    this.loading = true;
     this.nativeGeocoder.reverseGeocode(latitude, longitude, options)
       .then((result: any[]) => {
-        return console.log(JSON.stringify(result[0]));
+        this.scheduling.location.cep = result[0].postalCode;
+        this.scheduling.location.neighborhood = result[0].subLocality;
+        this.scheduling.location.state = result[0].administrativeArea;
+        this.scheduling.location.county = result[0].subAdministrativeArea;
+        this.scheduling.location.publicPlace = result[0].thoroughfare;
+        this.scheduling.location.number = result[0].subThoroughfare;
+        this.loading = false;
       })
-      .catch((error: any) => console.log(error));
+      .catch((error: any) => {
+        this.loading = false;
+        this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
+      });
   }
 
-  save() {
+  async openLocation() {
+    let promise = await new Promise((resolve, reject) => {
+      this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+        if (canRequest) {
+          this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+            () => {
+              this.isLocationOpen = true;
+              resolve();
+            },
+            error => {
+              this.showToast(this.messageCode['WARNNING']['WRE008']['summary'], 'warning', 3000);
+              this.isLocationOpen = false;
+              reject();
+            }
+          );
+        }
+      });
+    });
+  }
 
+  verifyBeforeSave() {
+    if (this.scheduling.date === undefined
+      || this.scheduling.hour === undefined) {
+      this.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning', 3000);
+      throw new Error();
+    }
+
+    if (this.scheduling.description === undefined) {
+      if (this.scheduling.picture === undefined) {
+        this.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning', 3000);
+        throw new Error();
+      }
+    }
+    if (this.scheduling.picture === undefined) {
+      if (this.scheduling.description === undefined) {
+        this.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning', 3000);
+        throw new Error();
+      }
+    }
+
+    if (this.scheduling.location === undefined || this.scheduling.location.cep === undefined
+      || this.scheduling.location.county === undefined
+      || this.scheduling.location.neighborhood === undefined
+      || this.scheduling.location.publicPlace === undefined
+      || this.scheduling.location.state === undefined
+      || this.scheduling.location.complement === undefined
+    ) {
+      this.showToast(this.messageCode['WARNNING']['WRE001']['summary'], 'warning', 3000);
+      throw new Error();
+    }
+  }
+
+  async save() {
+    try {
+      this.verifyBeforeSave();
+      if (this.customer.scheduling === undefined || this.customer.scheduling.length <= 0) {
+        this.customer.scheduling = [this.scheduling];
+      } else {
+        this.customer.scheduling.push(this.scheduling);
+      }
+      let promise = await new Promise((resolve, reject) => {
+        this.schedulingService.save(this.customer, resolve, reject);
+      });
+      this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
+      this.updateCustomer(promise);
+    } catch (error) {
+      this.showToast(this.messageCode['WARNNING'][error]['summary'], 'warning', 3000);
+    }
+  }
+
+  updateCustomer(promise) {
+    this.customer.scheduling = promise;
+    localStorage.setItem('currentUser', JSON.stringify(promise));
   }
 }
 

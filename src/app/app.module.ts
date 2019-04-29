@@ -19,6 +19,8 @@ import { JwtInterceptor } from './security/jwt.interceptor';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import { Diagnostic } from '@ionic-native/diagnostic/ngx';
 
 
 @NgModule({
@@ -43,7 +45,9 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
     AuthGuard,
     DecriptEncript,
     Geolocation,
-    NativeGeocoder
+    NativeGeocoder,
+    LocationAccuracy,
+    Diagnostic
   ],
   bootstrap: [AppComponent],
 })

@@ -1,45 +1,46 @@
 <ion-content padding>
   <ion-list>
     <ion-item rounded>
-      <ion-label color="medium" position="stacked">Data</ion-label>
-      <ion-datetime required [(ngModel)]="customer.scheduling.date" display-format="DD MM YYYY">
+      <ion-datetime placeholder="Data" required [(ngModel)]="scheduling.date" display-format="DD MM YYYY">
       </ion-datetime>
     </ion-item>
     <ion-item rounded>
-      <ion-label color="medium" position="stacked">Horário</ion-label>
-      <ion-datetime required [(ngModel)]="customer.scheduling.hour" display-format="HH:mm">
+      <ion-datetime placeholder="Horário" required [(ngModel)]="scheduling.hour" display-format="HH:mm">
       </ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label color="medium" position="stacked">Endereço</ion-label>
-      <ion-input required [(ngModel)]="customer.location.publicPlace" type="text"></ion-input>
+      <ion-input required [(ngModel)]="scheduling.location.publicPlace" type="text"></ion-input>
       <ion-button type="button" shape="round" expand="full" color="primary" (click)="getLocation()">
+        <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
         Selecionar localização atual
       </ion-button>
     </ion-item>
     <ion-item>
-      <ion-label color="medium" position="stacked">Descrição</ion-label>
-      <ion-input required (ionBlur)="comparePassword()" placeholder="Descreva quais materias deseja reclicar" [(ngModel)]="customer.scheduling.description" type="text"></ion-input>
+      <ion-label color="medium" text-wrap position="stacked">Descreva quais materias deseja reclicar ou mande uma foto dos produtos</ion-label>
+      <ion-input required (ionBlur)="comparePassword()" placeholder="" [(ngModel)]="scheduling.description" type="text"></ion-input>
     </ion-item>
+    <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="takePicture()">
+      Tirar foto
+    </ion-button>
+    <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="openGallery()">
+      Abrir galeria
+    </ion-button>
     <ion-item>
       <ion-label color="medium" position="stacked">Peso</ion-label>
-      <ion-input minlength="0" placeholder="Se souber o peso aproximado insira neste campo" [(ngModel)]="customer.scheduling.weight" type="number"></ion-input>
+      <ion-input minlength="0" placeholder="" [(ngModel)]="scheduling.weight" type="number"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Quantidade</ion-label>
-      <ion-input minlength="0" placeholder="Se souber a quantidade aproximada insira neste campo" [(ngModel)]="customer.scheduling.quantity" type="number"></ion-input>
+      <ion-input minlength="0" placeholder="" [(ngModel)]="scheduling.quantity" type="number"></ion-input>
     </ion-item>
   </ion-list>
 </ion-content>
-
 <ion-footer>
   <ion-toolbar>
-    <ion-button type="button" shape="round" expand="full" color="primary" (click)="takePicture()">
-      Tirar foto
-    </ion-button>
-    <ion-button type="button" shape="round" expand="full" color="primary" (click)="openGallery()">
-      Abrir galeria
+    <ion-button type="button" shape="round" expand="full" color="success" (click)="save()">
+      Agendar
     </ion-button>
   </ion-toolbar>
 </ion-footer>
