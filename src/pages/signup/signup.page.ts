@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Customer } from 'src/models/customer';
 import { Location } from 'src/models/location';
 import { CepService } from 'src/providers/cep.service';
-import { MenuController, ToastController } from '@ionic/angular';
+import { MenuController, ToastController, NavController } from '@ionic/angular';
 import { Toast } from 'src/app/toast/toast';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from 'src/providers/auth.service';
@@ -35,7 +35,7 @@ export class SignupPage implements OnInit {
 
 
 
-  constructor(private router: Router, private cepService: CepService, private menuCtrl: MenuController, private http: HttpClient, private toastController: ToastController, private authService: AuthService) {
+  constructor(private naveCltr: NavController, private router: Router, private cepService: CepService, private menuCtrl: MenuController, private http: HttpClient, private toastController: ToastController, private authService: AuthService) {
     this.customer = new Customer();
     this.customer.location = new Location();
     this.islogged = false;
@@ -234,6 +234,10 @@ export class SignupPage implements OnInit {
     this.router.navigate(['/home']);
   }
 
+
+  ionViewDidEnter() {
+    this.naveCltr.pop();
+  }
 
 
 }

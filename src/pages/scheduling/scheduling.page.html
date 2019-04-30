@@ -1,61 +1,88 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Agendamento
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+
 <ion-content padding>
   <ion-list>
-    <ion-card *ngFor=" let scheduling of customer.scheduling">
-      <ion-item >
-        <ion-icon name="pin" slot="start">Agendamento</ion-icon>
+    <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="opencards()">
+      Ver agendamentos
+    </ion-button>
+
+    <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="openAdd()">
+      Criar agendamento
+    </ion-button>
+    <div *ngIf="showCards">
+      <ion-card *ngFor=" let scheduling of customer.scheduling">
+        <ion-item lines="none">
+          <ion-icon name="pin" slot="end"></ion-icon>
+        </ion-item>
+        <ion-card-content>
+          <ion-item lines="none" rounded>
+            <ion-label>{{scheduling.date | date: 'dd/MM/yyyy'}} - {{scheduling.hour | date: 'HH:mm'}}</ion-label>
+          </ion-item>
+          <ion-item lines="none" rounded>
+            <ion-label text-wrap>{{scheduling.location.cep}} - {{scheduling.location.publicPlace}}</ion-label>
+          </ion-item>
+          <ion-button expand="full">Detalhes</ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <div *ngIf="showAddScheduling">
+      <ion-item rounded>
+        <ion-datetime placeholder="Data" required [(ngModel)]="scheduling.date" display-format="DD MM YYYY">
+        </ion-datetime>
       </ion-item>
-      
-      <ion-card-content>
-        <ion-label>{{scheduling.date}}</ion-label>
-        <ion-label>{{scheduling.hour}}</ion-label>
-        <ion-label>{{scheduling.location.cep}}</ion-label>
-        <ion-label>{{scheduling.location.publicPlace}}</ion-label>
-        <ion-button fill="outline" slot="end">Detalhes</ion-button>
-      </ion-card-content>
-    </ion-card>
+      <ion-item rounded>
+        <ion-datetime placeholder="Horário" required [(ngModel)]="scheduling.hour" display-format="HH:mm">
+        </ion-datetime>
+      </ion-item>
 
-
-    <ion-item rounded>
-      <ion-datetime placeholder="Data" required [(ngModel)]="scheduling.date" display-format="DD MM YYYY">
-      </ion-datetime>
-    </ion-item>
-    <ion-item rounded>
-      <ion-datetime placeholder="Horário" required [(ngModel)]="scheduling.hour" display-format="HH:mm">
-      </ion-datetime>
-    </ion-item>
-
-    <ion-item>
-      <ion-label color="medium" position="stacked">Endereço</ion-label>
-      <ion-input required [(ngModel)]="scheduling.location.publicPlace" type="text"></ion-input>
-      <ion-button type="button" shape="round" expand="full" color="primary" (click)="getLocation()">
-        <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
-        Selecionar localização atual
+      <ion-item>
+        <ion-label color="medium" position="stacked">Endereço</ion-label>
+        <ion-input required [(ngModel)]="scheduling.location.publicPlace" type="text"></ion-input>
+        <ion-button type="button" shape="round" expand="full" color="primary" (click)="getLocation()">
+          <ion-spinner name="circles" *ngIf="loading" item-left></ion-spinner>
+          Selecionar localização atual
+        </ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-label color="medium" text-wrap position="stacked">Descreva quais materias deseja reclicar ou mande uma foto dos produtos</ion-label>
+        <ion-input required (ionBlur)="comparePassword()" placeholder="" [(ngModel)]="scheduling.description" type="text"></ion-input>
+      </ion-item>
+      <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="takePicture()">
+        Tirar foto
       </ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-label color="medium" text-wrap position="stacked">Descreva quais materias deseja reclicar ou mande uma foto dos produtos</ion-label>
-      <ion-input required (ionBlur)="comparePassword()" placeholder="" [(ngModel)]="scheduling.description" type="text"></ion-input>
-    </ion-item>
-    <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="takePicture()">
-      Tirar foto
-    </ion-button>
-    <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="openGallery()">
-      Abrir galeria
-    </ion-button>
-    <ion-item>
-      <ion-label color="medium" position="stacked">Peso</ion-label>
-      <ion-input minlength="0" placeholder="" [(ngModel)]="scheduling.weight" type="number"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label color="medium" position="stacked">Quantidade</ion-label>
-      <ion-input minlength="0" placeholder="" [(ngModel)]="scheduling.quantity" type="number"></ion-input>
-    </ion-item>
+      <ion-button type="button" large="true" shape="round" expand="full" color="primary" (click)="openGallery()">
+        Abrir galeria
+      </ion-button>
+      <ion-item>
+        <ion-label color="medium" position="stacked">Peso</ion-label>
+        <ion-input minlength="0" placeholder="" [(ngModel)]="scheduling.weight" type="number"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="medium" position="stacked">Quantidade</ion-label>
+        <ion-input minlength="0" placeholder="" [(ngModel)]="scheduling.quantity" type="number"></ion-input>
+      </ion-item>
+    </div>
   </ion-list>
 </ion-content>
-<ion-footer>
+<ion-footer *ngIf="showAddScheduling">
   <ion-toolbar>
     <ion-button type="button" shape="round" expand="full" color="success" (click)="save()">
       Agendar
     </ion-button>
+    <ion-button type="button" shape="round" expand="full" color="primary" (click)="clean()">
+        Limpar
+      </ion-button>
   </ion-toolbar>
 </ion-footer>

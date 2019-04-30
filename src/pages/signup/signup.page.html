@@ -1,3 +1,14 @@
+<ion-header *ngIf="islogged">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Conta
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content padding>
   <ion-list>
     <ion-item rounded>
@@ -14,7 +25,7 @@
     </ion-item>
     <ion-item>
       <ion-label color="medium" position="stacked">Confirmar Senha</ion-label>
-      <ion-input required  (ionBlur)="comparePassword()" minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="confirmPassword" type="password"></ion-input>
+      <ion-input required (ionBlur)="comparePassword()" minlength="6" maxlength="20" placeholder="mínimo 6 caracteres e máximo 20" [(ngModel)]="confirmPassword" type="password"></ion-input>
     </ion-item>
   </ion-list>
   <div *ngIf="islogged">
@@ -78,7 +89,7 @@
       Salvar
     </ion-button>
     <ion-button type="button" shape="round" expand="full" color="primary" (click)="clean()">
-      Limpar 
+      Limpar
     </ion-button>
   </ion-toolbar>
 </ion-footer>

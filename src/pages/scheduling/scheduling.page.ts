@@ -5,7 +5,7 @@ import { Customer } from 'src/models/customer';
 import { Scheduling } from 'src/models/scheduling';
 import { Toast } from 'src/app/toast/toast';
 import { HttpClient } from '@angular/common/http';
-import { ToastController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
@@ -34,14 +34,34 @@ export class SchedulingPage implements OnInit {
   loading;
   path;
   imageName;
+  showCards;
+  showAddScheduling;
 
-  constructor(private transfer: FileTransfer, private file: File, private diagnostic: Diagnostic, private schedulingService: SchedulingService, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation, private authService: AuthService, private http: HttpClient, private toastController: ToastController) {
+  constructor(private naveCltr: NavController, private transfer: FileTransfer, private file: File, private diagnostic: Diagnostic, private schedulingService: SchedulingService, private locationAccuracy: LocationAccuracy, private nativeGeocoder: NativeGeocoder, private geolocation: Geolocation, private authService: AuthService, private http: HttpClient, private toastController: ToastController) {
     this.scheduling = new Scheduling();
     this.scheduling.location = new Location();
     this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
     this.loading = false;
   }
 
+
+  opencards() {
+    if (this.showCards) {
+      this.showCards = false;
+    } else {
+      this.showCards = true;
+      this.showAddScheduling = false;
+    }
+  }
+
+  openAdd() {
+    if (this.showAddScheduling) {
+      this.showAddScheduling = false;
+    } else {
+      this.showAddScheduling = true;
+      this.showCards = false;
+    }
+  }
 
 
   async showToast(message: string, color: string, time: number) {
@@ -227,6 +247,11 @@ export class SchedulingPage implements OnInit {
     });
   }
 
+  clean() {
+    this.scheduling = new Scheduling();
+    this.scheduling.location = new Location();
+  }
+
   verifyBeforeSave() {
     if (this.scheduling.date === undefined
       || this.scheduling.hour === undefined) {
@@ -273,10 +298,16 @@ export class SchedulingPage implements OnInit {
   }
 
   updateCustomer(promise) {
-    if (promise !== undefined) {
+    if (promise !== undefined && promise !== null) {
       this.customer.scheduling = promise;
       localStorage.setItem('currentUser', JSON.stringify(promise));
     }
+    this.clean();
+  }
+
+
+  ionViewDidEnter() {
+    this.naveCltr.pop();
   }
 }
 
