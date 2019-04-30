@@ -7,7 +7,7 @@ export class Scheduling {
     weight: Number;
     description: String;
     quantity: Number;
-    picture: String;
+    picture: string;
 
     constructor() {
 

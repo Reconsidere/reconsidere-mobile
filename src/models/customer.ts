@@ -15,7 +15,7 @@ export class Customer {
     location: Location;
     materials: [];
     payment: Payment;
-    scheduling: [Scheduling];
+    scheduling: any[];
 }
 
 

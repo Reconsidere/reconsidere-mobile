@@ -1,5 +1,20 @@
 <ion-content padding>
   <ion-list>
+    <ion-card *ngFor=" let scheduling of customer.scheduling">
+      <ion-item >
+        <ion-icon name="pin" slot="start">Agendamento</ion-icon>
+      </ion-item>
+      
+      <ion-card-content>
+        <ion-label>{{scheduling.date}}</ion-label>
+        <ion-label>{{scheduling.hour}}</ion-label>
+        <ion-label>{{scheduling.location.cep}}</ion-label>
+        <ion-label>{{scheduling.location.publicPlace}}</ion-label>
+        <ion-button fill="outline" slot="end">Detalhes</ion-button>
+      </ion-card-content>
+    </ion-card>
+
+
     <ion-item rounded>
       <ion-datetime placeholder="Data" required [(ngModel)]="scheduling.date" display-format="DD MM YYYY">
       </ion-datetime>

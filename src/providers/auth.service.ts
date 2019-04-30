@@ -17,6 +17,8 @@ export class AuthService {
   result: any;
   private currenTokenSubject: BehaviorSubject<any>;
   public currentToken: Observable<any>;
+  private currentUserSubject: BehaviorSubject<any>;
+  public currentUser: Observable<any>;
 
 
   constructor(private http: HttpClient, private decriptEncript: DecriptEncript) {
@@ -24,10 +26,19 @@ export class AuthService {
       JSON.parse(localStorage.getItem('currentToken'))
     );
     this.currentToken = this.currenTokenSubject.asObservable();
+
+    this.currentUserSubject = new BehaviorSubject<any>(
+      JSON.parse(localStorage.getItem('currentUser'))
+    );
+    this.currentUser = this.currentUserSubject.asObservable();
   }
 
   public get currenTokenValue(): any {
     return this.currenTokenSubject.value;
+  }
+
+  public get currenUserValue(): any {
+    return this.currentUserSubject.value;
   }
 
 
@@ -139,6 +150,7 @@ export class AuthService {
       localStorage.setItem('currentToken', JSON.stringify(customer.token));
       localStorage.setItem('currentUser', JSON.stringify(customer));
       this.currenTokenSubject.next(customer.token);
+      this.currentUserSubject.next(customer);
       return true;
     }
   }

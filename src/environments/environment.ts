@@ -9,7 +9,7 @@ export const environment = {
     port: '27017',
     dbname: 'reconsideredb',
     //uri: `http://localhost:32546`
-    uri:'192.168.0.6:32546'
+    uri:'http://192.168.25.45:32546'
   },
   api: {
     auth: {

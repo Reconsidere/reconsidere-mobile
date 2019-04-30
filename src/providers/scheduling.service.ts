@@ -25,4 +25,8 @@ export class SchedulingService {
           reject(error);
         });
   }
+
+  loadAll(id) {
+    return this.http.get<any>(`${environment.database.uri}/customer/scheduling/all/${id}`);
+  }
 }

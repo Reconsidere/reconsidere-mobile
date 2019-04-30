@@ -21,6 +21,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Diagnostic } from '@ionic-native/diagnostic/ngx';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { File } from '@ionic-native/file/ngx';
 
 
 @NgModule({
@@ -47,7 +49,9 @@ import { Diagnostic } from '@ionic-native/diagnostic/ngx';
     Geolocation,
     NativeGeocoder,
     LocationAccuracy,
-    Diagnostic
+    Diagnostic,
+    FileTransfer,
+    File,
   ],
   bootstrap: [AppComponent],
 })
