@@ -1,6 +1,6 @@
 {
     "INFO": {
-      "IRE006": { "status": "INFO", "summary": "", "message": ""}
+      "IRE001": { "status": "INFO", "summary": "Realmente deseja sair?", "message": ""}
     },
     "SUCCESS": {
       "SRE001": { "status": "SUCCESS", "summary": "Dados salvos com sucesso!", "message": ""},
@@ -16,7 +16,9 @@
       "WRE005": { "status": "WARNNING", "summary": "Senhas deve ter no mínimo 6 caracteres e máximo 20", "message": ""},
       "WRE006": { "status": "WARNNING", "summary": "Email já está em uso", "message": "Não é permitido a utilização de emails duplicados."},
       "WRE007": { "status": "WARNNING", "summary": "Não foi possível buscar sua localização!", "message": ""},
-      "WRE008": { "status": "WARNNING", "summary": "Não foi possível ativar sua localização!", "message": ""}
+      "WRE008": { "status": "WARNNING", "summary": "Não foi possível ativar sua localização!", "message": ""},
+      "WRE009": { "status": "WARNNING", "summary": "Erro ao capturar foto!", "message": ""},
+      "WRE010": { "status": "WARNNING", "summary": "Erro ao abrir imagem!", "message": ""}
 
   
   
@@ -30,7 +32,8 @@
       "ERE005": { "status": "ERROR", "summary": "Não foi possível carregar o documento a partir do banco de dados", "message": ""},
       "ERE006": { "status": "ERROR", "summary": "Não foi possível salvar os dados", "message": ""},
       "ERE007": { "status": "ERROR", "summary": "Não foi possível remover os dados", "message": ""},
-      "ERE008": { "status": "ERROR", "summary": "Não foi possível localizar os dados solicitados.", "message": ""}
+      "ERE008": { "status": "ERROR", "summary": "Não foi possível localizar os dados solicitados.", "message": ""},
+      "ERE009": { "status": "ERROR", "summary": "Erro de conexão com o servidor!", "message": ""}
     },
     "DANGER": {
       "DRE001": { "status": "DANGER", "summary": "", "message": ""},

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
 import jwt from 'jsonwebtoken';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Customer } from 'src/models/customer';
-import { map } from 'rxjs/operators';
+import { map, timeout } from 'rxjs/operators';
 
 
 @Injectable({
@@ -48,6 +48,9 @@ export class AuthService {
     }
 
     const jwtHelper = new JwtHelperService();
+    if (this.currenTokenSubject.value === undefined || this.currenTokenSubject.value === null) {
+      return false;
+    }
     if (jwtHelper.isTokenExpired(this.currenTokenSubject.value)) {
       return this.refreshToken();
     }
@@ -131,7 +134,7 @@ export class AuthService {
           error => {
             throw new Error('ERE001');
           }
-        )
+        ), timeout(9000)
       );
   }
 

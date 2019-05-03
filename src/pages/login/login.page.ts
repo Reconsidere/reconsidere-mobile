@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Credentials } from 'src/models/credentials';
-import { MenuController, NavController } from '@ionic/angular';
+import { MenuController, NavController, ToastController } from '@ionic/angular';
 import { AuthService } from 'src/providers/auth.service';
 import { SignupPage } from '../signup/signup.page';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
+import { Toast } from 'src/app/toast/toast';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -22,12 +24,17 @@ export class LoginPage implements OnInit {
   returnUrl: string;
   error = '';
   hidepassword = true;
+  toast: Toast;
+  messageCode: any;
 
-  constructor(private menuCtrl: MenuController, private navCtrl: NavController, private authService: AuthService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) {
+  constructor(private http: HttpClient, private toastController: ToastController, private menuCtrl: MenuController, private navCtrl: NavController, private authService: AuthService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) {
     this.credentials = new Credentials();
     this.menuCtrl.enable(false);
+    this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
+
   }
 
+  
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -38,6 +45,23 @@ export class LoginPage implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
+  async showToast(message: string, color: string, time: number) {
+    const toast = await this.toastController.create({
+      message: message,
+      showCloseButton: true,
+      position: 'top',
+      closeButtonText: 'Fechar',
+      color: color,
+      duration: time,
+      animated: true
+    });
+    toast.present();
+  }
+
+  loadMessages(response) {
+    this.messageCode = response;
+  }
+
 
   get f() {
     return this.loginForm.controls;
@@ -45,29 +69,43 @@ export class LoginPage implements OnInit {
 
 
   login() {
-    this.submitted = true;
+    try {
+      this.submitted = true;
 
-    if (this.loginForm.invalid) {
-      return;
-    }
+      if (this.loginForm.invalid) {
+        return;
+      }
 
-     this.loading = true;
-    if (!environment.auth) {
-      this.router.navigate([this.returnUrl]);
-    } else {
-      this.authService
-        .login(this.f.username.value, this.f.password.value)
-        .pipe(first())
-        .subscribe(
-          data => {
-            this.menuCtrl.enable(true);
-            this.router.navigate([this.returnUrl]);
-          },
-          error => {
-            this.error = error;
-            this.loading = false;
-          }
-        );
+      this.loading = true;
+      if (!environment.auth) {
+        this.router.navigate([this.returnUrl]);
+      } else {
+        this.authService
+          .login(this.f.username.value, this.f.password.value)
+          .pipe(first())
+          .subscribe(
+            data => {
+              this.menuCtrl.enable(true);
+              this.router.navigate([this.returnUrl]);
+            },
+            error => {
+              this.error = error;
+              this.loading = false;
+              try {
+                this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 5000);
+              } catch (error) {
+                this.showToast(this.messageCode['ERROR']['ERE009']['summary'], 'danger', 5000);
+              }
+
+            }
+          );
+      }
+    } catch (error) {
+      try {
+        this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 5000);
+      } catch (error) {
+        this.showToast(this.messageCode['ERROR']['ERE009']['summary'], 'danger', 5000);
+      }
     }
   }
 
@@ -76,6 +114,6 @@ export class LoginPage implements OnInit {
   gplogin() { }
 
   signup() {
-    this.navCtrl.navigateForward('signup');
+    this.router.navigate(['signup'])
   }
 }

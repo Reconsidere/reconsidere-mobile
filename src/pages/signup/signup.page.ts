@@ -220,7 +220,7 @@ export class SignupPage implements OnInit {
       this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
       this.finishSignUp(promise, isUpdate);
     } catch (error) {
-      this.showToast(this.messageCode['WARNNING'][error]['summary'], 'warning', 3000);
+      this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 3000);
     }
   }
 
@@ -233,11 +233,5 @@ export class SignupPage implements OnInit {
     this.menuCtrl.enable(true);
     this.router.navigate(['/home']);
   }
-
-
-  ionViewDidEnter() {
-    this.naveCltr.pop();
-  }
-
 
 }

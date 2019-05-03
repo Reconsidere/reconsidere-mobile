@@ -104,39 +104,48 @@ export class SchedulingPage implements OnInit {
 
 
   takePicture() {
-    Camera.getPicture({
-      quality: 100,
-      destinationType: Camera.DestinationType.FILE_URI,
-      encodingType: Camera.EncodingType.JPEG,
-      mediaType: Camera.MediaType.PICTURE
-    }).then((imageData) => {
-      this.path = imageData.substr(0, imageData.lastIndexOf('/') + 1);
-      this.imageName = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.length);
-    }, (err) => {
-      console.log(err);
-    });
+    try {
+      Camera.getPicture({
+        quality: 100,
+        destinationType: Camera.DestinationType.FILE_URI,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE
+      }).then((imageData) => {
+        this.path = imageData.substr(0, imageData.lastIndexOf('/') + 1);
+        this.imageName = imageData.substring(imageData.lastIndexOf('/') + 1, imageData.length);
+      }, (err) => {
+        console.log(err);
+      });
+    } catch (error) {
+      this.showToast(this.messageCode['WARNNING']['WRE009']['summary'], 'warning', 3000);
+    }
   }
 
 
 
   openGallery() {
-    let cameraOptions = {
-      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-      destinationType: Camera.DestinationType.FILE_URI,
-      quality: 100,
-      targetWidth: 1000,
-      targetHeight: 1000,
-      encodingType: Camera.EncodingType.JPEG,
-      mediaType: Camera.MediaType.PICTURE,
-      correctOrientation: true
-    }
+    try {
+      let cameraOptions = {
+        sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+        destinationType: Camera.DestinationType.FILE_URI,
+        quality: 100,
+        targetWidth: 1000,
+        targetHeight: 1000,
+        encodingType: Camera.EncodingType.JPEG,
+        mediaType: Camera.MediaType.PICTURE,
+        correctOrientation: true
+      }
 
-    Camera.getPicture(cameraOptions)
-      .then(file_uri => {
-        this.path = file_uri.substr(0, file_uri.lastIndexOf('/') + 1);
-        this.imageName = file_uri.substring(file_uri.lastIndexOf('/') + 1, file_uri.length);
-      },
-        err => console.log(err));
+      Camera.getPicture(cameraOptions)
+        .then(file_uri => {
+          this.path = file_uri.substr(0, file_uri.lastIndexOf('/') + 1);
+          this.imageName = file_uri.substring(file_uri.lastIndexOf('/') + 1, file_uri.length);
+        },
+          err => console.log(err));
+
+    } catch (error) {
+      this.showToast(this.messageCode['WARNNING']['WRE010']['summary'], 'warning', 3000);
+    }
   }
 
   uploadFile() {
@@ -170,81 +179,98 @@ export class SchedulingPage implements OnInit {
 
 
   async getLocation() {
-    await this.enableGps();
-    if (!this.isLocationOpen) {
-      await this.openLocation();
-    }
-    if (this.isLocationOpen) {
-      let promise = await new Promise((resolve, reject) => {
-        this.geolocation.getCurrentPosition().then((resp) => {
-          this.latitude = resp.coords.latitude;
-          this.longitude = resp.coords.longitude;
-          resolve();
-        }).catch((error) => {
-          reject();
+    try {
+      await this.enableGps();
+      if (!this.isLocationOpen) {
+        await this.openLocation();
+      }
+      if (this.isLocationOpen) {
+        let promise = await new Promise((resolve, reject) => {
+          this.geolocation.getCurrentPosition().then((resp) => {
+            this.latitude = resp.coords.latitude;
+            this.longitude = resp.coords.longitude;
+            resolve();
+          }).catch((error) => {
+            reject();
+          });
         });
-      });
-      await this.getAddress(this.latitude, this.longitude);
+        await this.getAddress(this.latitude, this.longitude);
+      }
+    } catch (error) {
+      this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
     }
   }
   async enableGps() {
-    let promise = await new Promise((resolve, reject) => {
-      this.diagnostic.isGpsLocationEnabled().then(x => {
-        if (x) {
-          this.isLocationOpen = true;
-        } else {
+    try {
+      let promise = await new Promise((resolve, reject) => {
+        this.diagnostic.isGpsLocationEnabled().then(x => {
+          if (x) {
+            this.isLocationOpen = true;
+          } else {
+            this.isLocationOpen = false;
+          }
+          resolve();
+        }).catch(x => {
           this.isLocationOpen = false;
-        }
-        resolve();
-      }).catch(x => {
-        this.isLocationOpen = false;
-        reject();
+          reject();
+        });
       });
-    });
+    } catch (error) {
+      this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
+    }
   }
 
 
   async getAddress(latitude, longitude) {
-    let options: NativeGeocoderOptions = {
-      useLocale: true,
-      maxResults: 5
-    };
+    try {
 
-    this.loading = true;
-    this.nativeGeocoder.reverseGeocode(latitude, longitude, options)
-      .then((result: any[]) => {
-        this.scheduling.location.cep = result[0].postalCode;
-        this.scheduling.location.neighborhood = result[0].subLocality;
-        this.scheduling.location.state = result[0].administrativeArea;
-        this.scheduling.location.county = result[0].subAdministrativeArea;
-        this.scheduling.location.publicPlace = result[0].thoroughfare;
-        this.scheduling.location.number = result[0].subThoroughfare;
-        this.loading = false;
-      })
-      .catch((error: any) => {
-        this.loading = false;
-        this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
-      });
+      let options: NativeGeocoderOptions = {
+        useLocale: true,
+        maxResults: 5
+      };
+
+      this.loading = true;
+      this.nativeGeocoder.reverseGeocode(latitude, longitude, options)
+        .then((result: any[]) => {
+          this.scheduling.location.cep = result[0].postalCode;
+          this.scheduling.location.neighborhood = result[0].subLocality;
+          this.scheduling.location.state = result[0].administrativeArea;
+          this.scheduling.location.county = result[0].subAdministrativeArea;
+          this.scheduling.location.publicPlace = result[0].thoroughfare;
+          this.scheduling.location.number = result[0].subThoroughfare;
+          this.loading = false;
+        })
+        .catch((error: any) => {
+          this.loading = false;
+          this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
+        });
+    } catch (error) {
+      this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
+    }
   }
 
   async openLocation() {
-    let promise = await new Promise((resolve, reject) => {
-      this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-        if (canRequest) {
-          this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-            () => {
-              this.isLocationOpen = true;
-              resolve();
-            },
-            error => {
-              this.showToast(this.messageCode['WARNNING']['WRE008']['summary'], 'warning', 3000);
-              this.isLocationOpen = false;
-              reject();
-            }
-          );
-        }
+    try {
+      let promise = await new Promise((resolve, reject) => {
+        this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+          if (canRequest) {
+            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+              () => {
+                this.isLocationOpen = true;
+                resolve();
+              },
+              error => {
+                this.showToast(this.messageCode['WARNNING']['WRE008']['summary'], 'warning', 3000);
+                this.isLocationOpen = false;
+                reject();
+              }
+            );
+          }
+        });
       });
-    });
+    } catch (error) {
+      this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
+    }
   }
 
   clean() {
@@ -293,7 +319,7 @@ export class SchedulingPage implements OnInit {
       this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
       this.updateCustomer(promise);
     } catch (error) {
-      this.showToast(this.messageCode['WARNNING'][error]['summary'], 'warning', 3000);
+      this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 3000);
     }
   }
 
@@ -305,10 +331,5 @@ export class SchedulingPage implements OnInit {
     this.clean();
   }
 
-
-  ionViewDidEnter() {
-    this.naveCltr.pop();
-  }
 }
-
 
