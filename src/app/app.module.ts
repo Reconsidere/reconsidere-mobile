@@ -25,6 +25,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file/ngx';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import { Facebook } from '@ionic-native/facebook/ngx';
 
 
 registerLocaleData(localePt);
@@ -56,6 +57,7 @@ registerLocaleData(localePt);
     Diagnostic,
     FileTransfer,
     File,
+    Facebook
   ],
   bootstrap: [AppComponent],
 })

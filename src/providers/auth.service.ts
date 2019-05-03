@@ -104,6 +104,21 @@ export class AuthService {
         });
   }
 
+  signupFb(customer: Customer, resolve, reject) {
+    this.addFb(customer, resolve, reject);
+  }
+
+  addFb(customer: Customer, resolve, reject) {
+    this.http
+      .post(environment.database.uri + `/customer/addFb`, customer)
+      .subscribe(res => {
+        resolve(res);
+      },
+        error => {
+          reject(error);
+        });
+  }
+
   cleanStorage() {
     localStorage.removeItem('currentToken');
     localStorage.removeItem('currentUser');

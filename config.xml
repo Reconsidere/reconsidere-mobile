@@ -92,6 +92,12 @@
     </plugin>
     <plugin name="cordova-plugin-file-transfer" spec="1.7.1" />
     <plugin name="cordova-plugin-x-toast" spec="2.7.2" />
-    <engine name="ios" spec="5.0.1" />
+    <plugin name="cordova-plugin-facebook4" spec="4.2.1">
+        <variable name="APP_ID" value="2197655276977219" />
+        <variable name="APP_NAME" value="reconsidere-mobile" />
+        <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
+        <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.40.0" />
+    </plugin>
     <engine name="android" spec="^8.0.0" />
+    <engine name="ios" spec="4.5.5" />
 </widget>

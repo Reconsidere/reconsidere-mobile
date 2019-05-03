@@ -9,6 +9,9 @@ import { environment } from 'src/environments/environment';
 import { first } from 'rxjs/operators';
 import { Toast } from 'src/app/toast/toast';
 import { HttpClient } from '@angular/common/http';
+import { Facebook } from '@ionic-native/facebook/ngx';
+import { Customer } from 'src/models/customer';
+
 
 @Component({
   selector: 'app-login',
@@ -27,14 +30,15 @@ export class LoginPage implements OnInit {
   toast: Toast;
   messageCode: any;
 
-  constructor(private http: HttpClient, private toastController: ToastController, private menuCtrl: MenuController, private navCtrl: NavController, private authService: AuthService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) {
+  constructor(private facebook: Facebook, private http: HttpClient, private toastController: ToastController, private menuCtrl: MenuController, private navCtrl: NavController, private authService: AuthService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) {
     this.credentials = new Credentials();
     this.menuCtrl.enable(false);
     this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
 
+
   }
 
-  
+
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -109,7 +113,31 @@ export class LoginPage implements OnInit {
     }
   }
 
-  fblogin() { }
+   async fblogin() {
+    let permissions = new Array<string>();
+    permissions = ["public_profile", "email"];
+
+    this.facebook.login(permissions).then((response) => {
+      let params = new Array<string>();
+
+      this.facebook.api("/me?fields=name,email", params)
+        .then(async res => {
+          let customer = new Customer();
+          customer.name = res.name;
+          customer.email = res.email;
+          customer.password = res.id;
+          customer.creationDate = new Date();
+          let promise = await new Promise((resolve, reject) => {
+            this.authService.signupFb(customer, resolve, reject);
+          });
+        }, (error) => {
+          console.log('ERRO LOGIN: ', error);
+        })
+    }, (error) => {
+      console.log(error);
+      alert(error);
+    });
+  }
 
   gplogin() { }
 
