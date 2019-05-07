@@ -112,6 +112,7 @@ export class AuthService {
     this.http
       .post(environment.database.uri + `/customer/addFb`, customer)
       .subscribe(res => {
+        this.generateToken(res, this.decript(res['password']));
         resolve(res);
       },
         error => {
@@ -123,6 +124,7 @@ export class AuthService {
     localStorage.removeItem('currentToken');
     localStorage.removeItem('currentUser');
     this.currenTokenSubject.next(null);
+    this.currentUserSubject.next(null);
   }
 
 

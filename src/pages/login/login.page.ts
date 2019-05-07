@@ -11,6 +11,7 @@ import { Toast } from 'src/app/toast/toast';
 import { HttpClient } from '@angular/common/http';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { Customer } from 'src/models/customer';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class LoginPage implements OnInit {
   toast: Toast;
   messageCode: any;
 
-  constructor(private facebook: Facebook, private http: HttpClient, private toastController: ToastController, private menuCtrl: MenuController, private navCtrl: NavController, private authService: AuthService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) {
+  constructor(private googlePlus: GooglePlus, private facebook: Facebook, private http: HttpClient, private toastController: ToastController, private menuCtrl: MenuController, private navCtrl: NavController, private authService: AuthService, private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router) {
     this.credentials = new Credentials();
     this.menuCtrl.enable(false);
     this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
@@ -96,7 +97,7 @@ export class LoginPage implements OnInit {
               this.error = error;
               this.loading = false;
               try {
-                this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 5000);
+                this.showToast(this.messageCode['ERROR'][error.message]['summary'], 'danger', 5000);
               } catch (error) {
                 this.showToast(this.messageCode['ERROR']['ERE009']['summary'], 'danger', 5000);
               }
@@ -113,7 +114,7 @@ export class LoginPage implements OnInit {
     }
   }
 
-   async fblogin() {
+  async fblogin() {
     let permissions = new Array<string>();
     permissions = ["public_profile", "email"];
 
@@ -125,21 +126,39 @@ export class LoginPage implements OnInit {
           let customer = new Customer();
           customer.name = res.name;
           customer.email = res.email;
-          customer.password = res.id;
+          customer.password = this.authService.encript(res.id);
           customer.creationDate = new Date();
           let promise = await new Promise((resolve, reject) => {
             this.authService.signupFb(customer, resolve, reject);
           });
+          this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
+          this.finishLogin(promise);
         }, (error) => {
-          console.log('ERRO LOGIN: ', error);
+          this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 3000);
+
         })
     }, (error) => {
-      console.log(error);
-      alert(error);
+      this.showToast(this.messageCode['ERROR']['ERE010']['summary'], 'danger', 3000);
     });
   }
 
-  gplogin() { }
+  finishLogin(promise) {
+    this.menuCtrl.enable(true);
+    this.router.navigate(['/home']);
+  }
+
+  gplogin() {
+    this.googlePlus.login({
+      'webClientId': '699836759747-rtkddsslr64ejd2oon4gr0om9d30sadd.apps.googleusercontent.com',
+      'offline': true
+    })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
 
   signup() {
     this.router.navigate(['signup'])

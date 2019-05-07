@@ -26,6 +26,7 @@ import { File } from '@ionic-native/file/ngx';
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 
 registerLocaleData(localePt);
@@ -57,7 +58,8 @@ registerLocaleData(localePt);
     Diagnostic,
     FileTransfer,
     File,
-    Facebook
+    Facebook,
+    GooglePlus
   ],
   bootstrap: [AppComponent],
 })
