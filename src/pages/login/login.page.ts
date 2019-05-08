@@ -115,31 +115,36 @@ export class LoginPage implements OnInit {
   }
 
   async fblogin() {
-    let permissions = new Array<string>();
-    permissions = ["public_profile", "email"];
+    try {
+      let permissions = new Array<string>();
+      permissions = ["public_profile", "email"];
 
-    this.facebook.login(permissions).then((response) => {
-      let params = new Array<string>();
+      this.facebook.login(permissions).then((response) => {
+        let params = new Array<string>();
 
-      this.facebook.api("/me?fields=name,email", params)
-        .then(async res => {
-          let customer = new Customer();
-          customer.name = res.name;
-          customer.email = res.email;
-          customer.password = this.authService.encript(res.id);
-          customer.creationDate = new Date();
-          let promise = await new Promise((resolve, reject) => {
-            this.authService.signupFb(customer, resolve, reject);
-          });
-          this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
-          this.finishLogin(promise);
-        }, (error) => {
-          this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 3000);
+        this.facebook.api("/me?fields=name,email", params)
+          .then(async res => {
+            let customer = new Customer();
+            customer.name = res.name;
+            customer.email = res.email;
+            customer.password = this.authService.encript(res.id);
+            customer.creationDate = new Date();
+            let promise = await new Promise((resolve, reject) => {
+              this.authService.signupFb(customer, resolve, reject);
+            });
+            this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
+            this.finishLogin(promise);
+          }, (error) => {
+            this.showToast(this.messageCode['ERROR'][error]['summary'], 'danger', 3000);
 
-        })
-    }, (error) => {
+          })
+      }, (error) => {
+        this.showToast(this.messageCode['ERROR']['ERE010']['summary'], 'danger', 3000);
+      });
+
+    } catch (error) {
       this.showToast(this.messageCode['ERROR']['ERE010']['summary'], 'danger', 3000);
-    });
+    }
   }
 
   finishLogin(promise) {
@@ -147,20 +152,30 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  gplogin() {
-    this.googlePlus.login({
-      'webClientId': '699836759747-rtkddsslr64ejd2oon4gr0om9d30sadd.apps.googleusercontent.com',
-      'offline': true
-    })
-      .then(res => {
-        console.log(res);
-      })
-      .catch(err => {
-        console.error(err);
-      });
+  async gplogin() {
+    try {
+      this.googlePlus.login({})
+        .then(async res => {
+          let customer = new Customer();
+          customer.name = res.givenName;
+          customer.email = res.email;
+          customer.password = this.authService.encript(res.userId);
+          customer.creationDate = new Date();
+          let promise = await new Promise((resolve, reject) => {
+            this.authService.signupGP(customer, resolve, reject);
+          });
+          this.showToast(this.messageCode['SUCCESS']['SRE001']['summary'], 'success', 3000);
+          this.finishLogin(promise);
+        })
+        .catch(err => {
+          this.showToast(this.messageCode['ERROR']['ERE011']['summary'], 'danger', 3000);
+        });
+    } catch (error) {
+      this.showToast(this.messageCode['ERROR']['ERE011']['summary'], 'danger', 3000);
+    }
   }
 
   signup() {
-    this.router.navigate(['signup'])
+    this.router.navigate(['signup']);
   }
 }

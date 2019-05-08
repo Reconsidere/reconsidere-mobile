@@ -108,9 +108,26 @@ export class AuthService {
     this.addFb(customer, resolve, reject);
   }
 
+
+  signupGP(customer: Customer, resolve, reject) {
+    this.addGp(customer, resolve, reject);
+  }
+
   addFb(customer: Customer, resolve, reject) {
     this.http
-      .post(environment.database.uri + `/customer/addFb`, customer)
+    .post(environment.database.uri + `/customer/addFb`, customer)
+    .subscribe(res => {
+      this.generateToken(res, this.decript(res['password']));
+      resolve(res);
+    },
+    error => {
+      reject(error);
+    });
+  }
+  
+  addGp(customer: Customer, resolve, reject) {
+    this.http
+      .post(`${environment.database.uri}/customer/addGp`, customer)
       .subscribe(res => {
         this.generateToken(res, this.decript(res['password']));
         resolve(res);

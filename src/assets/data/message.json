@@ -34,7 +34,8 @@
       "ERE007": { "status": "ERROR", "summary": "Não foi possível remover os dados", "message": ""},
       "ERE008": { "status": "ERROR", "summary": "Não foi possível localizar os dados solicitados.", "message": ""},
       "ERE009": { "status": "ERROR", "summary": "Erro de conexão com o servidor!", "message": ""},
-      "ERE010": { "status": "ERROR", "summary": "Ocorreu um erro ao logar com o facebook!", "message": ""}
+      "ERE010": { "status": "ERROR", "summary": "Ocorreu um erro ao logar com sua conta  do facebook!", "message": ""},
+      "ERE011": { "status": "ERROR", "summary": "Ocorreu um erro ao logar com sua conta do google!", "message": ""}
     },
     "DANGER": {
       "DRE001": { "status": "DANGER", "summary": "", "message": ""},
