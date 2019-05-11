@@ -98,9 +98,12 @@
         <variable name="FACEBOOK_HYBRID_APP_EVENTS" value="false" />
         <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.40.0" />
     </plugin>
+    <plugin name="cordova-plugin-android-permissions" spec="1.0.0" />
+    <plugin name="cordova-plugin-request-location-accuracy" spec="2.2.3" />
+    <plugin name="cordova-plugin-geolocation" spec="4.0.1" />
     <plugin name="cordova-plugin-googleplus" spec="^5.2.1">
         <variable name="REVERSED_CLIENT_ID" value="699836759747-mj3opbpfe53hvlbb6g72kfl5g900gspi.apps.googleusercontent.com" />
     </plugin>
-    <engine name="android" spec="^8.0.0" />
     <engine name="ios" spec="4.5.5" />
+    <engine name="android" spec="^7.1.4" />
 </widget>

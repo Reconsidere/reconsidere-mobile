@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { SchedulingPage } from './scheduling.page';
+import { StepsPipe } from 'src/app/pipes/steps.pipe';
+
 
 const routes: Routes = [
   {
@@ -19,8 +21,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+
   ],
-  declarations: [SchedulingPage]
+  declarations: [SchedulingPage, StepsPipe],
+
 })
-export class SchedulingPageModule {}
+export class SchedulingPageModule { }

@@ -21,20 +21,49 @@
       Criar agendamento
     </ion-button>
     <div *ngIf="showCards">
-      <ion-card *ngFor=" let scheduling of customer.scheduling">
-        <ion-item lines="none">
-          <ion-icon name="pin" slot="end"></ion-icon>
-        </ion-item>
-        <ion-card-content>
-          <ion-item lines="none" rounded>
-            <ion-label>{{scheduling.date | date: 'dd/MM/yyyy'}} - {{scheduling.hour | date: 'HH:mm'}}</ion-label>
+      <div *ngFor=" let scheduling  of customer.scheduling; let i = index">
+        <ion-card>
+          <ion-item lines="none">
+            <ion-icon name="pin" slot="end"></ion-icon>
           </ion-item>
-          <ion-item lines="none" rounded>
-            <ion-label text-wrap>{{scheduling.location.cep}} - {{scheduling.location.publicPlace}}</ion-label>
-          </ion-item>
-          <ion-button expand="full">Detalhes</ion-button>
-        </ion-card-content>
-      </ion-card>
+          <ion-card-content>
+            <ion-item lines="none" rounded>
+              <ion-label>{{scheduling.date | date: 'dd/MM/yyyy'}} - {{scheduling.hour | date: 'HH:mm'}}</ion-label>
+            </ion-item>
+            <ion-item lines="none" rounded>
+              <ion-label text-wrap>{{scheduling.location.cep}} - {{scheduling.location.publicPlace}}</ion-label>
+            </ion-item>
+            <div class="progress">
+              <div class="progress-track"></div>
+              <div #step1 id="step1" class="progress-step">
+                Aberto
+                <div hidden>
+                  {{scheduling.status.open | steps:step1}}
+                </div>
+              </div>
+              <div #step2 id="step2" class="progress-step">
+                Agendado
+                <div hidden>
+                  {{scheduling.status.scheduled | steps:step2}}
+                </div>
+              </div>
+              <div #step3 id="step3" class="progress-step">
+                Saiu para coleta
+                <div hidden>
+                  {{scheduling.status.forCollection | steps:step3}}
+                </div>
+              </div>
+              <div #step4 id="step4" class="progress-step">
+                Finalizado
+                <div hidden>
+                  {{scheduling.status.finalized | steps:step4}}
+                </div>
+              </div>
+            </div>
+
+          </ion-card-content>
+        </ion-card>
+      </div>
     </div>
 
     <div *ngIf="showAddScheduling">
@@ -82,8 +111,7 @@
       Agendar
     </ion-button>
     <ion-button type="button" shape="round" expand="full" color="primary" (click)="clean()">
-        Limpar
-      </ion-button>
+      Limpar
+    </ion-button>
   </ion-toolbar>
 </ion-footer>
-

@@ -15,6 +15,7 @@ import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-nati
 import { File } from '@ionic-native/file/ngx';
 import { environment } from 'src/environments/environment.prod';
 import { Location } from 'src/models/location';
+import { Status } from 'src/models/status';
 
 
 @Component({
@@ -87,8 +88,11 @@ export class SchedulingPage implements OnInit {
     if (this.customer.location !== undefined || this.customer.location !== null) {
       this.scheduling.location = this.customer.location;
     }
-    if (this.customer.scheduling === undefined) {
+    if (this.customer.scheduling === undefined || this.customer.scheduling.length <= 0) {
       this.customer.scheduling = [];
+    }
+    if (this.scheduling.location === undefined) {
+      this.scheduling.location = new Location();
     }
     this.loadSchedules();
   }
@@ -100,8 +104,6 @@ export class SchedulingPage implements OnInit {
   setSchedules(values) {
     this.customer.scheduling = values;
   }
-
-
 
   takePicture() {
     try {
@@ -252,21 +254,17 @@ export class SchedulingPage implements OnInit {
   async openLocation() {
     try {
       let promise = await new Promise((resolve, reject) => {
-        this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-          if (canRequest) {
-            this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
-              () => {
-                this.isLocationOpen = true;
-                resolve();
-              },
-              error => {
-                this.showToast(this.messageCode['WARNNING']['WRE008']['summary'], 'warning', 3000);
-                this.isLocationOpen = false;
-                reject();
-              }
-            );
+        this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
+          () => {
+            this.isLocationOpen = true;
+            resolve();
+          },
+          error => {
+            this.showToast(this.messageCode['WARNNING']['WRE008']['summary'], 'warning', 3000);
+            this.isLocationOpen = false;
+            reject();
           }
-        });
+        );
       });
     } catch (error) {
       this.showToast(this.messageCode['WARNNING']['WRE007']['summary'], 'warning', 3000);
@@ -307,6 +305,12 @@ export class SchedulingPage implements OnInit {
   async save() {
     try {
       this.uploadFile();
+      this.scheduling.status = new Status();
+      this.scheduling.status.open = true;
+      this.scheduling.status.scheduled = false;
+      this.scheduling.status.forCollection = false;
+      this.scheduling.status.finalized = false;
+
       this.verifyBeforeSave();
       if (this.customer.scheduling === undefined || this.customer.scheduling.length <= 0) {
         this.customer.scheduling = [this.scheduling];

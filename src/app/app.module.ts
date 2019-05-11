@@ -59,7 +59,7 @@ registerLocaleData(localePt);
     FileTransfer,
     File,
     Facebook,
-    GooglePlus
+    GooglePlus,
   ],
   bootstrap: [AppComponent],
 })

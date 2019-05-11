@@ -1,4 +1,5 @@
 import { Location } from './location';
+import { Status } from './status';
 
 export class Scheduling {
     date: Date;
@@ -8,6 +9,7 @@ export class Scheduling {
     description: String;
     quantity: Number;
     picture: string;
+    status: Status;
 
     constructor() {
 
