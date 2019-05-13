@@ -33,10 +33,6 @@ export class StepsPipe implements PipeTransform {
     if (value && element.id === 'step4') {
       element.classList.remove("is-active");
       element.classList.add("is-complete");
-      element.classList.remove("is-complete");
-      element.classList.remove("is-complete");
-      element.classList.remove("is-complete");
-      element.classList.remove("is-complete");
       element.classList.add("is-active");
     }
   }

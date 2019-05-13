@@ -171,7 +171,7 @@ export class SchedulingPage implements OnInit {
         .then((data) => {
           console.log(data + " Uploaded Successfully");
         }, (err) => {
-          throw new Error();
+          throw new Error(err);
         });
     } catch (error) {
       throw new Error();

@@ -28,7 +28,6 @@ import localePt from '@angular/common/locales/pt';
 import { Facebook } from '@ionic-native/facebook/ngx';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
-
 registerLocaleData(localePt);
 
 @NgModule({

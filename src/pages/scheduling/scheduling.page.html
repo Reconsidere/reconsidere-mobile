@@ -25,11 +25,9 @@
         <ion-card>
           <ion-item lines="none">
             <ion-icon name="pin" slot="end"></ion-icon>
+            <ion-label>Data {{scheduling.date | date: 'dd/MM/yyyy'}} - {{scheduling.hour | date: 'HH:mm'}}</ion-label>
           </ion-item>
           <ion-card-content>
-            <ion-item lines="none" rounded>
-              <ion-label>{{scheduling.date | date: 'dd/MM/yyyy'}} - {{scheduling.hour | date: 'HH:mm'}}</ion-label>
-            </ion-item>
             <ion-item lines="none" rounded>
               <ion-label text-wrap>{{scheduling.location.cep}} - {{scheduling.location.publicPlace}}</ion-label>
             </ion-item>
