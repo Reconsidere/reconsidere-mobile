@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Itinerário
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <div *ngIf="isShowSelect">
+      <ion-item lines="none">
+        
+      </ion-item>
+    </div>
+
+    <div *ngIf="showCards">
+      <div *ngFor="let schedulingNeighborhoods  of schedulingNeighborhoods; let i = index">
+        <ion-card>
+          <ion-item lines="none">
+            <ion-icon name="car" slot="end"></ion-icon>
+            <ion-label text-wrap>Bairro {{schedulingNeighborhoods.neighborhood}}</ion-label>
+          </ion-item>
+          <ion-card-content *ngFor="let itinerary  of schedulingNeighborhoods.itinerary;">
+            <ion-item lines="none" rounded>
+              <ion-label text-wrap>{{itinerary.dayWeek}} - {{itinerary.hour}}</ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </div>
+  </ion-list>
+</ion-content>
