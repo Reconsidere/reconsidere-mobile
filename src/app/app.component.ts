@@ -32,6 +32,11 @@ export class AppComponent {
       icon: 'pin'
     },
     {
+      title: 'Itinerário',
+      url: '/neighborhood-scheduling',
+      icon: 'md-clipboard'
+    },
+    {
       title: 'Sair',
       url: '/logout',
       icon: 'exit'

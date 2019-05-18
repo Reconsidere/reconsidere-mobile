@@ -7,11 +7,10 @@ import { Toast } from 'src/app/toast/toast';
 
 @Component({
   selector: 'app-neighborhood-scheduling',
-  templateUrl: './neighborhood-scheduling.component.html',
-  styleUrls: ['./neighborhood-scheduling.component.scss'],
+  templateUrl: './neighborhood-scheduling.page.html',
+  styleUrls: ['./neighborhood-scheduling.page.scss'],
 })
-export class NeighborhoodSchedulingComponent implements OnInit {
-
+export class NeighborhoodSchedulingPage implements OnInit {
   toast: Toast;
   messageCode: any;
   isShowSelect;
@@ -21,10 +20,10 @@ export class NeighborhoodSchedulingComponent implements OnInit {
 
   customer: Customer;
   constructor(private http: HttpClient, private toastController: ToastController, private neighborhoodSchedulingService: NeighborhoodSchedulingService) {
-    this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
     this.schedulingNeighborhoods = [];
+    this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
   }
-
+  
   ngOnInit() {
     //carregar os bairros cadastrados pelas empresas e verificar 
     //qual localidade é igual ao do usuário se não encontrar
@@ -32,7 +31,7 @@ export class NeighborhoodSchedulingComponent implements OnInit {
     this.customer = JSON.parse(localStorage.getItem('currentUser'));
 
     if (this.customer.location === undefined || this.customer.location.neighborhood === undefined) {
-      this.showToast(this.messageCode['INFO']['IRE002']['summary'], 'primary', 3000);
+      this.showToast(this.messageCode['INFO']['IRE002']['summary'], 'warning', 3000);
       this.neighborhoodSchedulingService.loadAll().subscribe(x => this.loadAllScheduliNgneighborhood(x));
     } else {
       this.neighborhoodSchedulingService.loadScheduling(this.customer.location.neighborhood).subscribe(x => this.loadSchedulingNeighborhood(x));
@@ -67,4 +66,5 @@ export class NeighborhoodSchedulingComponent implements OnInit {
   loadMessages(response) {
     this.messageCode = response;
   }
+
 }

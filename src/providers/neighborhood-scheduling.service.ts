@@ -11,7 +11,7 @@ export class NeighborhoodSchedulingService {
 
 
   loadAll() {
-    return this.http.get<any>(`${environment.database.uri}/organization/neighborhoodscheduling/all`);
+    return this.http.get<any>(`${environment.database.uri}/organization/neighborhoodscheduling/app/all`);
   }
 
 

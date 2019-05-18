@@ -18,7 +18,8 @@ const routes: Routes = [
   },
   { path: 'logout', loadChildren: '../pages/logout/logout.module#LogoutPageModule' },
   { path: 'scheduling', loadChildren: '../pages/scheduling/scheduling.module#SchedulingPageModule', canActivate: [AuthGuard] },
-  { path: 'neighborhood-scheduling', loadChildren: '../pages/neighborhood/neighborhood-scheduling.module#NeighborhoodSchedulingComponentPageModule', canActivate: [AuthGuard] }
+  { path: 'neighborhood-scheduling', loadChildren: '../pages/neighborhood-scheduling/neighborhood-scheduling.module#NeighborhoodSchedulingPageModule',  canActivate: [AuthGuard] }
+
 
 
 ];
