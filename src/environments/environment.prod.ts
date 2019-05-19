@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   auth: true,
   database: {
     description: 'Eowyn Reconsidere Enterprise Operation Mongo DataBase',

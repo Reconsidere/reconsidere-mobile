@@ -1,7 +1,8 @@
 {
     "INFO": {
       "IRE001": { "status": "INFO", "summary": "Realmente deseja sair?", "message": ""},
-      "IRE002": { "status": "INFO", "summary": "Por favor, preencha sua localidade na sessão de conta, ou selecione um dos bairros abaixo para ver a agenda de coleta.", "message": ""}
+      "IRE002": { "status": "INFO", "summary": "Por favor, preencha sua localidade na sessão de conta, ou selecione um dos bairros abaixo para ver a agenda de coleta.", "message": ""},
+      "IRE003": { "status": "INFO", "summary": "Não existem itinerários cadastrados no momento", "message": ""}
     },
     "SUCCESS": {
       "SRE001": { "status": "SUCCESS", "summary": "Dados salvos com sucesso!", "message": ""},

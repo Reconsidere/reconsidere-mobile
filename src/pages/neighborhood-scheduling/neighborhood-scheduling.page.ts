@@ -16,22 +16,29 @@ export class NeighborhoodSchedulingPage implements OnInit {
   isShowSelect;
   schedulingNeighborhoodsSelect;
   schedulingNeighborhoods
+  schedulingNeighborhoodsItems;
   showCards;
+  selected;
 
   customer: Customer;
   constructor(private http: HttpClient, private toastController: ToastController, private neighborhoodSchedulingService: NeighborhoodSchedulingService) {
     this.schedulingNeighborhoods = [];
-    this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response));
+    this.schedulingNeighborhoodsItems = [];
   }
-  
+
   ngOnInit() {
     //carregar os bairros cadastrados pelas empresas e verificar 
     //qual localidade é igual ao do usuário se não encontrar
     //mostra um campo para ele escolher o bairro por um select.
     this.customer = JSON.parse(localStorage.getItem('currentUser'));
+    this.load();
+  }
 
+  async load() {
+    let promise = await new Promise((resolve, reject) => {
+      this.http.get("./../assets/data/message.json").subscribe(response => this.loadMessages(response, resolve, reject));
+    });
     if (this.customer.location === undefined || this.customer.location.neighborhood === undefined) {
-      this.showToast(this.messageCode['INFO']['IRE002']['summary'], 'warning', 3000);
       this.neighborhoodSchedulingService.loadAll().subscribe(x => this.loadAllScheduliNgneighborhood(x));
     } else {
       this.neighborhoodSchedulingService.loadScheduling(this.customer.location.neighborhood).subscribe(x => this.loadSchedulingNeighborhood(x));
@@ -39,7 +46,14 @@ export class NeighborhoodSchedulingPage implements OnInit {
   }
 
   loadAllScheduliNgneighborhood(items) {
-    this.schedulingNeighborhoodsSelect = Object.values(items);
+    if (items === undefined || items === null) {
+      this.showToast(this.messageCode['INFO']['IRE003']['summary'], 'primary', 3000);
+    } else {
+      this.showToast(this.messageCode['INFO']['IRE002']['summary'], 'primary', 3000);
+      this.schedulingNeighborhoodsSelect = Object.values(items);
+      this.isShowSelect = true;
+      this.schedulingNeighborhoodsItems = items;
+    }
   }
 
   loadSchedulingNeighborhood(neighborhood) {
@@ -47,6 +61,12 @@ export class NeighborhoodSchedulingPage implements OnInit {
     this.showCards = true;
     this.isShowSelect = false;
 
+  }
+
+  selectedNeighborhood() {
+    this.showCards = true;
+    let item = this.schedulingNeighborhoodsItems.find(x => x.neighborhood === this.selected);
+    this.schedulingNeighborhoods.push(item);
   }
 
   async showToast(message: string, color: string, time: number) {
@@ -62,9 +82,13 @@ export class NeighborhoodSchedulingPage implements OnInit {
     toast.present();
   }
 
-
-  loadMessages(response) {
-    this.messageCode = response;
+  loadMessages(response, resolve, reject) {
+    try {
+      this.messageCode = response;
+      resolve();
+    } catch (error) {
+      reject();
+    }
   }
 
 }

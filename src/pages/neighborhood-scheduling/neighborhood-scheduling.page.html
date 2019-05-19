@@ -12,8 +12,11 @@
 <ion-content padding>
   <ion-list>
     <div *ngIf="isShowSelect">
-      <ion-item lines="none">
-        
+      <ion-item rounded lines="none">
+        <ion-label color="medium" position="stacked">Bairro</ion-label>
+        <ion-select (ionChange)="selectedNeighborhood()" [(ngModel)]="selected">
+          <ion-select-option *ngFor=" let item of schedulingNeighborhoodsSelect">{{item.neighborhood}}</ion-select-option>
+        </ion-select>
       </ion-item>
     </div>
 
@@ -26,7 +29,7 @@
           </ion-item>
           <ion-card-content *ngFor="let itinerary  of schedulingNeighborhoods.itinerary;">
             <ion-item lines="none" rounded>
-              <ion-label text-wrap>{{itinerary.dayWeek}} - {{itinerary.hour}}</ion-label>
+              <ion-label text-wrap>{{itinerary.dayWeek}} - {{itinerary.hour |  date:'HH:mm'}}</ion-label>
             </ion-item>
           </ion-card-content>
         </ion-card>
